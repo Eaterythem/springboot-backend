@@ -1,0 +1,42 @@
+package io.eaterythem.eaterythem.controller;
+
+import io.eaterythem.eaterythem.dto.RecipeDTO;
+import io.eaterythem.eaterythem.service.RecipeService;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.UUID;
+
+@RestController
+@RequestMapping("/api/recipes")
+public class RecipeController {
+    private final RecipeService recipeService;
+
+    public RecipeController(RecipeService recipeService) {
+        this.recipeService = recipeService;
+    }
+
+    @GetMapping
+    public List<RecipeDTO> getAllRecipes() {
+        return recipeService.getAllRecipes();
+    }
+
+    @GetMapping("/{id}")
+    public RecipeDTO getRecipeById(@PathVariable UUID id) {
+        return recipeService.getRecipeById(id);
+    }
+
+    @PostMapping
+    public RecipeDTO createRecipe(@RequestBody RecipeDTO recipeDTO) {
+        return recipeService.createRecipe(recipeDTO);
+    }
+
+    @PutMapping("/{id}")
+    public RecipeDTO updateRecipe(@PathVariable UUID id, @RequestBody RecipeDTO recipeDTO) {
+        return recipeService.updateRecipe(id, recipeDTO);
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteRecipe(@PathVariable UUID id) {
+        recipeService.deleteRecipe(id);
+    }
+} 
