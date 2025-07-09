@@ -18,6 +18,8 @@ public class MealCycle {
 
     private String name;
 
+    private UUID userId;
+
     @Enumerated(EnumType.STRING)
     private MealType mealType;
 

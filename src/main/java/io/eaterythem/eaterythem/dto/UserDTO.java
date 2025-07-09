@@ -1,18 +1,23 @@
 package io.eaterythem.eaterythem.dto;
 
-import java.util.UUID;
 import java.util.List;
+import java.util.UUID;
 
 import lombok.Data;
 
 @Data
 public class UserDTO {
     private UUID id;
+
     private String email;
+    
     private String name;
 
-    private List<UUID> recipeIds;
-    private List<UUID> mealPlanIds;
-    private List<UUID> ownedCycleIds;
-    private List<UUID> sharedCycleIds;
+    private List<RecipeDTO> recipes;
+
+    private List<MealPlanDTO> mealPlans;
+
+    private List<MealCycleDTO> ownedCycles;
+
+    private List<MealCycleDTO> sharedCycles;
 }

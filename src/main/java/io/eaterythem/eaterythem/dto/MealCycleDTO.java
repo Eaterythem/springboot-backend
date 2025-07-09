@@ -11,13 +11,19 @@ import jakarta.validation.constraints.Size;
 @Data
 public class MealCycleDTO {
     private UUID id;
+    
     @NotBlank(message = "Name is required")
     @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")
     private String name;
+    
     @NotNull(message = "Meal type is required")
     private MealType mealType;
+    
     @NotNull(message = "User ID is required")
     private UUID userId;
+    
     private boolean isPublic;
-    private List<UUID> sharedWithIds;
+    
+    private List<MealCycleRecipeDTO> recipes;
+
 } 
