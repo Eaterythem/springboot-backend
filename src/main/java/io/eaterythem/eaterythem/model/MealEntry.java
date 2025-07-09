@@ -27,11 +27,11 @@ public class MealEntry {
     @Enumerated(EnumType.STRING)
     private MealType mealType;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "planned_recipe_id")
     private Recipe plannedRecipe;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "actual_recipe_id")
     private Recipe actualRecipe;
 

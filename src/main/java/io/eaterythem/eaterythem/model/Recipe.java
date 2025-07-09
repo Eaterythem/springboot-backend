@@ -20,7 +20,9 @@ public class Recipe {
     private User user;
 
     private String name;
+
     private String instructions;
+    
     private String ingredients;
 
     @Enumerated(EnumType.STRING)

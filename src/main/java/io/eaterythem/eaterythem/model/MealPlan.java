@@ -24,15 +24,15 @@ public class MealPlan {
     @Enumerated(EnumType.STRING)
     private MealPlanStatus status = MealPlanStatus.ACTIVE;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "breakfast_cycle_id")
     private MealCycle breakfastCycle;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "lunch_cycle_id")
     private MealCycle lunchCycle;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "dinner_cycle_id")
     private MealCycle dinnerCycle;
 
