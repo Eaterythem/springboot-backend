@@ -1,8 +1,11 @@
 package io.eaterythem.eaterythem.controller;
 
 import io.eaterythem.eaterythem.config.JwtUtil;
+import io.eaterythem.eaterythem.dto.RegisterDTO;
 import io.eaterythem.eaterythem.dto.UserDTO;
+import io.eaterythem.eaterythem.dto.LoginDTO;
 import io.eaterythem.eaterythem.exception.BadRequestException;
+import io.eaterythem.eaterythem.mapper.UserMapper;
 import io.eaterythem.eaterythem.model.User;
 import io.eaterythem.eaterythem.repository.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -26,24 +29,38 @@ public class AuthController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final UserMapper userMapper;
 
-    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+
+    public AuthController(
+        AuthenticationManager authenticationManager,
+        UserRepository userRepository,
+        PasswordEncoder passwordEncoder,
+        JwtUtil jwtUtil,
+        UserMapper userMapper
+    ) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
+        this.userMapper = userMapper;
     }
 
     @PostMapping("/register")
-    public Map<String, Object> register(@RequestBody @Valid UserDTO userDTO) {
+    public Map<String, Object> register(@RequestBody @Valid RegisterDTO userDTO) {
         if (userRepository.findByEmail(userDTO.getEmail()).isPresent()) {
             throw new BadRequestException("Email already in use");
         }
+        if (!userDTO.getPassword().equals(userDTO.getConfirmPassword())){
+            throw new BadRequestException("Password don`t match please check again");
+        }
+
         User user = new User();
         user.setEmail(userDTO.getEmail());
         user.setName(userDTO.getName());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         userRepository.save(user);
+
         String token = jwtUtil.generateToken(user.getEmail(), user.getId());
         Map<String, Object> response = new HashMap<>();
         response.put("token", token);
@@ -51,13 +68,15 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody @Valid UserDTO userDTO) {
+    public Map<String, Object> login(@RequestBody @Valid LoginDTO userDTO) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(userDTO.getEmail(), userDTO.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
+
         Optional<User> userOpt = userRepository.findByEmail(userDTO.getEmail());
         if (userOpt.isEmpty()) throw new BadRequestException("User not found");
         User user = userOpt.get();
+        
         String token = jwtUtil.generateToken(user.getEmail(), user.getId());
         Map<String, Object> response = new HashMap<>();
         response.put("token", token);
@@ -69,10 +88,7 @@ public class AuthController {
         Optional<User> userOpt = userRepository.findByEmail(principal.getName());
         if (userOpt.isEmpty()) throw new BadRequestException("User not found");
         User user = userOpt.get();
-        UserDTO dto = new UserDTO();
-        dto.setId(user.getId());
-        dto.setEmail(user.getEmail());
-        dto.setName(user.getName());
+        UserDTO dto = userMapper.toDTO(user);
         return dto;
     }
 
