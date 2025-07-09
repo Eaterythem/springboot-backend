@@ -1,8 +1,11 @@
 package io.eaterythem.eaterythem.repository;
 
 import io.eaterythem.eaterythem.model.Tag;
+
+import java.util.UUID;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface TagRepository extends JpaRepository<Tag, Long> {
+public interface TagRepository extends JpaRepository<Tag, UUID> {
     // Additional query methods if needed
 } 
