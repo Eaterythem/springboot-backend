@@ -4,7 +4,7 @@ import io.eaterythem.eaterythem.dto.MealPlanDTO;
 import io.eaterythem.eaterythem.model.MealPlan;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = {UserMapper.class, MealCycleMapper.class, MealEntryMapper.class})
+@Mapper(componentModel = "spring", uses = {MealCycleMapper.class, MealEntryMapper.class})
 public interface MealPlanMapper {
     MealPlanDTO toDTO(MealPlan mealPlan);
     MealPlan toEntity(MealPlanDTO mealPlanDTO);

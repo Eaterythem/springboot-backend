@@ -5,7 +5,7 @@ import io.eaterythem.eaterythem.model.MealEntry;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {MealPlanMapper.class, RecipeMapper.class})
+@Mapper(componentModel = "spring", uses = {RecipeMapper.class})
 public interface MealEntryMapper {
 
     @Mapping(source = "mealPlan.id", target = "mealPlanId")

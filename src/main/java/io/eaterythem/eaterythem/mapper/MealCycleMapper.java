@@ -7,6 +7,8 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = {UserMapper.class, MealCycleRecipeMapper.class})
 public interface MealCycleMapper {
+
+    @Mapping(target = "userId", source = "user.id")
     MealCycleDTO toDTO(MealCycle mealCycle);
 
     @Mapping(target = "sharedWith", ignore = true)

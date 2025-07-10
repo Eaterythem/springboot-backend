@@ -7,7 +7,7 @@ import lombok.Data;
 public class MealCycleRecipeDTO {
     private UUID id;
     
-    private MealCycleDTO cycle;
+    private UUID cycleId;
     
     private RecipeDTO recipe;
     

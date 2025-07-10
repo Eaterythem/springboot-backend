@@ -7,8 +7,10 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = {RecipeMapper.class})
 public interface TagMapper {
+
     TagDTO toDTO(Tag tag);
 
     @Mapping(target = "recipes", ignore = true)
+    @Mapping(target = "id", ignore = true)
     Tag toEntity(TagDTO tagDTO);
 } 
