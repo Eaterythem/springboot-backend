@@ -5,6 +5,7 @@ import io.eaterythem.eaterythem.exception.BadRequestException;
 import io.eaterythem.eaterythem.mapper.RecipeMapper;
 import io.eaterythem.eaterythem.model.Recipe;
 import io.eaterythem.eaterythem.model.Tag;
+import io.eaterythem.eaterythem.model.User;
 import io.eaterythem.eaterythem.repository.RecipeRepository;
 import io.eaterythem.eaterythem.repository.TagRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -37,8 +38,11 @@ public class RecipeService {
         return recipeMapper.toDTO(recipeOpt.get());
     }
 
-public RecipeDTO createRecipe(RecipeDTO recipeDTO) {
+public RecipeDTO createRecipe(RecipeDTO recipeDTO, UUID userId) {
     Recipe recipe = recipeMapper.toEntity(recipeDTO);
+    User user = new User();
+    user.setId(userId);
+    recipe.setUser(user);
 
     List<Tag> resolvedTags = new ArrayList<>();
     for (Tag t : recipe.getTags()) {

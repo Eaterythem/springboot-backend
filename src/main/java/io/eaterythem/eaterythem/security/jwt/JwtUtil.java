@@ -1,4 +1,4 @@
-package io.eaterythem.eaterythem.config;
+package io.eaterythem.eaterythem.security.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;

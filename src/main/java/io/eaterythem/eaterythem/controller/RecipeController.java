@@ -1,8 +1,11 @@
 package io.eaterythem.eaterythem.controller;
 
 import io.eaterythem.eaterythem.dto.RecipeDTO;
+import io.eaterythem.eaterythem.security.UserPrincipal;
+import io.eaterythem.eaterythem.security.annotations.CurrentUser;
 import io.eaterythem.eaterythem.service.RecipeService;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.UUID;
 
@@ -26,8 +29,8 @@ public class RecipeController {
     }
 
     @PostMapping
-    public RecipeDTO createRecipe(@RequestBody RecipeDTO recipeDTO) {
-        return recipeService.createRecipe(recipeDTO);
+    public RecipeDTO createRecipe(@RequestBody RecipeDTO recipeDTO, @CurrentUser UserPrincipal user) {
+        return recipeService.createRecipe(recipeDTO, user.getUserId());
     }
 
     @PutMapping("/{id}")

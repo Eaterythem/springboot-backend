@@ -1,14 +1,15 @@
 package io.eaterythem.eaterythem.controller;
 
-import io.eaterythem.eaterythem.config.JwtUtil;
 import io.eaterythem.eaterythem.dto.RegisterDTO;
 import io.eaterythem.eaterythem.dto.UserDTO;
 import io.eaterythem.eaterythem.dto.LoginDTO;
 import io.eaterythem.eaterythem.model.User;
+import io.eaterythem.eaterythem.security.UserPrincipal;
+import io.eaterythem.eaterythem.security.annotations.CurrentUser;
+import io.eaterythem.eaterythem.security.jwt.JwtUtil;
 import io.eaterythem.eaterythem.service.AuthService;
 
 import org.springframework.web.bind.annotation.*;
-import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 import jakarta.validation.Valid;
@@ -47,9 +48,9 @@ public class AuthController {
     }
 
     @GetMapping("/me")
-    public UserDTO me(Principal principal) {
+    public UserDTO me(@CurrentUser UserPrincipal user) {
 
-        UserDTO userDTO = authService.me(principal.getName());
+        UserDTO userDTO = authService.me(user.getUsername());
         
         return userDTO;
     }
