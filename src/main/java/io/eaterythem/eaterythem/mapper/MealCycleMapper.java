@@ -2,16 +2,18 @@ package io.eaterythem.eaterythem.mapper;
 
 import io.eaterythem.eaterythem.dto.MealCycleDTO;
 import io.eaterythem.eaterythem.model.MealCycle;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = {UserMapper.class, MealCycleRecipeMapper.class})
+import java.util.List;
+
+import org.mapstruct.Mapper;
+
+@Mapper(componentModel = "spring", uses = {UserMapper.class, MealCycleRecipeMapper.class, BasicUserMapper.class})
 public interface MealCycleMapper {
 
-    @Mapping(target = "userId", source = "user.id")
     MealCycleDTO toDTO(MealCycle mealCycle);
+    
+    List<MealCycleDTO> toDTO(List<MealCycle> mealCycles);
 
-    @Mapping(target = "sharedWith", ignore = true)
-    @Mapping(target = "user", ignore = true)
+    // @Mapping(target = "sharedWith", ignore = true)
     MealCycle toEntity(MealCycleDTO mealCycleDTO);
 } 

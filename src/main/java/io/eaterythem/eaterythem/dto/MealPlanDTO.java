@@ -2,6 +2,8 @@ package io.eaterythem.eaterythem.dto;
 
 import java.util.Date;
 import java.util.UUID;
+
+import io.eaterythem.eaterythem.dto.Basic.BasicUserDTO;
 import io.eaterythem.eaterythem.model.enums.MealPlanStatus;
 import lombok.Data;
 import jakarta.validation.constraints.NotNull;
@@ -11,8 +13,7 @@ import java.util.List;
 public class MealPlanDTO {
     private UUID id;
     
-    @NotNull(message = "User ID is required")
-    private UUID userId;
+    private BasicUserDTO user;
     
     @NotNull(message = "Start date is required")
     private Date startDate;

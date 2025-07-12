@@ -2,6 +2,8 @@ package io.eaterythem.eaterythem.dto;
 
 import java.util.List;
 import java.util.UUID;
+
+import io.eaterythem.eaterythem.dto.Basic.BasicUserDTO;
 import io.eaterythem.eaterythem.model.enums.MealType;
 import lombok.Data;
 import jakarta.validation.constraints.NotBlank;
@@ -20,10 +22,12 @@ public class MealCycleDTO {
     private MealType mealType;
     
     @NotNull(message = "User ID is required")
-    private UUID userId;
+    private BasicUserDTO user;
     
     private boolean isPublic;
     
     private List<MealCycleRecipeDTO> recipes;
+
+    private List<BasicUserDTO> sharedWith;
 
 } 
