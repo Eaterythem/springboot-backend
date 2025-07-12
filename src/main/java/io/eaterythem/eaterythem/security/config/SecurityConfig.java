@@ -14,15 +14,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import io.eaterythem.eaterythem.security.filters.JwtAuthenticationFilter;
 
 @Configuration
-public class SecurityConfig {
+public class SecurityConfig{
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter) throws Exception {
         http
             .csrf(csrf -> csrf.disable()) 
             .sessionManagement(session -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .maximumSessions(1)
-                .maxSessionsPreventsLogin(true)
             )
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/swagger-ui/**").permitAll()
