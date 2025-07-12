@@ -23,6 +23,11 @@ public class RecipeController {
         return recipeService.getAllRecipes();
     }
 
+    @GetMapping("/me")
+    public List<RecipeDTO> getMeRecipes(@CurrentUser UserPrincipal user) {
+        return recipeService.getMeRecipes(user.getUserId());
+    }
+
     @GetMapping("/{id}")
     public RecipeDTO getRecipeById(@PathVariable UUID id) {
         return recipeService.getRecipeById(id);
@@ -34,8 +39,8 @@ public class RecipeController {
     }
 
     @PutMapping("/{id}")
-    public RecipeDTO updateRecipe(@PathVariable UUID id, @RequestBody RecipeDTO recipeDTO) {
-        return recipeService.updateRecipe(id, recipeDTO);
+    public RecipeDTO updateRecipe(@PathVariable UUID id, @RequestBody RecipeDTO recipeDTO, @CurrentUser UserPrincipal user) {
+        return recipeService.updateRecipe(id, recipeDTO, user.getUserId());
     }
 
     @DeleteMapping("/{id}")
