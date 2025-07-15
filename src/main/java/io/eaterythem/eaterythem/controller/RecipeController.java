@@ -44,7 +44,7 @@ public class RecipeController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteRecipe(@PathVariable UUID id) {
-        recipeService.deleteRecipe(id);
+    public void deleteRecipe(@PathVariable UUID id, @CurrentUser UserPrincipal user) {
+        recipeService.deleteRecipe(id, user.getUserId());
     }
 } 

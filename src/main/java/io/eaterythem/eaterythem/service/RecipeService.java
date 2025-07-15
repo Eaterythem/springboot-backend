@@ -26,11 +26,8 @@ public class RecipeService {
 
     public List<RecipeDTO> getAllRecipes() {
         List<Recipe> recipes = recipeRepository.findAll();
-        List<RecipeDTO> dtos = new ArrayList<>();
-        for (Recipe recipe : recipes) {
-            dtos.add(recipeMapper.toDTO(recipe));
-        }
-        return dtos;
+        List<RecipeDTO> recipeDTOs = recipeMapper.toDTO(recipes);
+        return recipeDTOs;
     }
 
     public List<RecipeDTO> getMeRecipes(UUID userId) {
@@ -43,10 +40,10 @@ public class RecipeService {
     }
 
     public RecipeDTO getRecipeById(UUID id) {
-        Optional<Recipe> recipeOpt = recipeRepository.findById(id);
-        if (recipeOpt.isEmpty())
-            throw new BadRequestException("Recipe not found");
-        return recipeMapper.toDTO(recipeOpt.get());
+        Recipe recipe = recipeRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException("Recipe not found"));
+
+        return recipeMapper.toDTO(recipe);
     }
 
     public RecipeDTO createRecipe(RecipeDTO recipeDTO, UUID userId) {
@@ -72,7 +69,7 @@ public class RecipeService {
         Recipe recipe = recipeRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("Recipe not found"));
 
-        if (recipe.getUser() == null || recipe.getUser().getId() != userId) {
+        if (recipe.getUser() == null ||!recipe.getUser().getId().equals(userId)){
             throw new UnauthorizedException("Only recipe creater can edit");
         }
 
@@ -94,7 +91,14 @@ public class RecipeService {
         return recipeMapper.toDTO(recipe);
     }
 
-    public void deleteRecipe(UUID id) {
+    public void deleteRecipe(UUID id, UUID userId) {
+        Recipe recipe = recipeRepository.findById(id)
+                .orElseThrow(() -> new BadRequestException("Recipe not found"));
+
+        if (recipe.getUser() == null || recipe.getUser().getId().equals(userId)){
+            throw new UnauthorizedException("Only recipe creator can Delete it");
+        }
+
         try {
             recipeRepository.deleteById(id);
         } catch (DataIntegrityViolationException ex) {
