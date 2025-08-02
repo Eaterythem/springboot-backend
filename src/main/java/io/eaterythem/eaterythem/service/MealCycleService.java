@@ -63,7 +63,6 @@ public class MealCycleService {
                 .orElseThrow(() -> new BadRequestException("MealCycle not found"));
 
         if (mealCycle.getUser() == null || !mealCycle.getUser().getId().equals(userId)) {
-            System.out.println("please " + userId + " " + mealCycle.getUser().getId());
             throw new UnauthorizedException("Only mealCycle creator can edit");
         }
 
