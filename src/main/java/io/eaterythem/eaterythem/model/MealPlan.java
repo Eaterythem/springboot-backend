@@ -1,10 +1,10 @@
 package io.eaterythem.eaterythem.model;
 
-import java.util.*;
-
-import io.eaterythem.eaterythem.model.enums.*;
+import io.eaterythem.eaterythem.model.enums.PlanStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import java.time.LocalDate;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,35 +13,29 @@ import lombok.*;
 @Table(name = "meal_plans")
 public class MealPlan {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    @ManyToOne
-    private User user;
-
-    private Date startDate;
+    private LocalDate startDate;
 
     @Enumerated(EnumType.STRING)
-    private MealPlanStatus status = MealPlanStatus.ACTIVE;
+    private PlanStatus status;
 
-    @OneToOne
-    @JoinColumn(name = "breakfast_cycle_id")
-    private MealCycle breakfastCycle;
+    private Integer breakfastCycle;
+    private Integer lunchCycle;
+    private Integer dinnerCycle;
 
-    @OneToOne
-    @JoinColumn(name = "lunch_cycle_id")
-    private MealCycle lunchCycle;
+    private Integer breakfastIndex;
+    private Integer lunchIndex;
+    private Integer dinnerIndex;
 
-    @OneToOne
-    @JoinColumn(name = "dinner_cycle_id")
-    private MealCycle dinnerCycle;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    private int breakfastIndex = 0;
-
-    private int lunchIndex = 0;
-    
-    private int DinnerIndex = 0;
-    
     @OneToMany(mappedBy = "mealPlan")
-    private List<MealEntry> entries;
+    private List<MealPlanParticipant> participants;
+
+    @OneToMany(mappedBy = "mealPlan")
+    private List<MealEntry> mealEntries;
 }

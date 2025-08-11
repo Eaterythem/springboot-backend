@@ -1,0 +1,177 @@
+datasource db {
+  provider = "postgresql" // change if needed
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+//
+// ENUMS
+//
+enum MealType {
+  BREAKFAST
+  LUNCH
+  DINNER
+}
+
+enum PlanStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum EntryStatus {
+  PENDING
+  APPROVED
+  REPLACED
+  SKIPPED
+}
+
+enum VoteType {
+  CHECK
+  SKIP
+  REPLACE
+}
+
+enum ParticipantRole {
+  OWNER
+  EDITOR
+  VOTER
+  VIEWER
+}
+
+//
+// MODELS
+//
+model Users {
+  id       Int      @id @default(autoincrement())
+  name     String
+  email    String   @unique
+  password String
+
+  mealPlans        MealPlans[]
+  mealPlanParticipants MealPlanParticipants[]
+  recipes          Recipes[]
+  mealVotes        MealVotes[]
+  mealCycles       MealCycles[]
+}
+
+model MealPlans {
+  id             Int        @id @default(autoincrement())
+  userId         Int
+  startDate      DateTime
+  status         PlanStatus
+  breakfastCycle Int?
+  lunchCycle     Int?
+  dinnerCycle    Int?
+  breakfastIndex Int?
+  lunchIndex     Int?
+  dinnerIndex    Int?
+
+  user           Users    @relation(fields: [userId], references: [id])
+  participants   MealPlanParticipants[]
+  mealEntries    MealEntries[]
+}
+
+model MealPlanParticipants {
+  id         Int             @id @default(autoincrement())
+  mealPlanId Int
+  userId     Int
+  role       ParticipantRole
+
+  mealPlan   MealPlans @relation(fields: [mealPlanId], references: [id])
+  user       Users     @relation(fields: [userId], references: [id])
+
+  @@unique([mealPlanId, userId])
+}
+
+model MealEntries {
+  id               Int         @id @default(autoincrement())
+  mealPlanId       Int
+  dayIndex         Int
+  mealType         MealType
+  plannedRecipeId  Int?
+  actualRecipeId   Int?
+  status           EntryStatus?
+  note             String?
+
+  mealPlan         MealPlans @relation(fields: [mealPlanId], references: [id])
+  plannedRecipe    Recipes?  @relation("PlannedRecipe", fields: [plannedRecipeId], references: [id])
+  actualRecipe     Recipes?  @relation("ActualRecipe", fields: [actualRecipeId], references: [id])
+  votes            MealVotes[]
+}
+
+model Recipes {
+  id          Int      @id @default(autoincrement())
+  name        String
+  instructions String
+  ingredients String
+  mealType    MealType
+  tags        String?
+  userId      Int
+
+  user        Users        @relation(fields: [userId], references: [id])
+  plannedIn   MealEntries[] @relation("PlannedRecipe")
+  actualIn    MealEntries[] @relation("ActualRecipe")
+  replacementIn MealVotes[] @relation("ReplacementRecipe") // no fields/references here
+  recipeTags  RecipeTags[]
+  mealCycleRecipes MealCycleRecipes[] // opposite side of MealCycleRecipes.recipe
+}
+
+model MealVotes {
+  id                   Int       @id @default(autoincrement())
+  mealEntryId          Int
+  userId               Int
+  voteType             VoteType
+  replacementRecipeId  Int?
+  note                 String?
+
+  mealEntry            MealEntries @relation(fields: [mealEntryId], references: [id])
+  user                 Users       @relation(fields: [userId], references: [id])
+  replacementRecipe    Recipes?    @relation("ReplacementRecipe", fields: [replacementRecipeId], references: [id])
+
+  @@unique([mealEntryId, userId])
+}
+
+model MealCycleRecipes {
+  id       Int   @id @default(autoincrement())
+  cycleId  Int
+  recipeId Int
+  position Int
+
+  cycle    MealCycles @relation(fields: [cycleId], references: [id])
+  recipe   Recipes    @relation(fields: [recipeId], references: [id])
+}
+
+
+model Tags {
+  id    Int     @id @default(autoincrement())
+  name  String  @unique
+  recipeTags RecipeTags[]
+}
+
+model RecipeTags {
+  recipeId Int
+  tagId    Int
+
+  recipe   Recipes @relation(fields: [recipeId], references: [id])
+  tag      Tags    @relation(fields: [tagId], references: [id])
+
+  @@id([recipeId, tagId])
+}
+
+model MealCycles {
+  id         Int     @id @default(autoincrement())
+  name       String
+  userId     Int
+  mealType   MealType
+  isPublic   Boolean
+  sharedWith String? // Keeping as requested
+
+  user       Users    @relation(fields: [userId], references: [id])
+  recipes    MealCycleRecipes[]
+}
+
+

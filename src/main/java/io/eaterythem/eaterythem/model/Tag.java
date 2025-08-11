@@ -19,5 +19,5 @@ public class Tag {
     private String name;
 
     @ManyToMany(mappedBy = "tags")
-    private List<Recipe> recipes;
+    private List<Recipe> recipesTags;
 }

@@ -1,10 +1,9 @@
 package io.eaterythem.eaterythem.model;
 
-import java.util.*;
-
-import io.eaterythem.eaterythem.model.enums.*;
+import io.eaterythem.eaterythem.model.enums.MealType;
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,16 +12,13 @@ import lombok.*;
 @Table(name = "recipes")
 public class Recipe {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
-    @ManyToOne
-    private User user;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     private String name;
 
     private String instructions;
-    
+
     private String ingredients;
 
     @Enumerated(EnumType.STRING)
@@ -37,5 +33,5 @@ public class Recipe {
     private List<Tag> tags;
 
     @OneToMany(mappedBy = "recipe")
-    private List<MealCycleRecipe> cycles;
+    private List<MealCycleRecipe> mealCycleRecipes;
 }

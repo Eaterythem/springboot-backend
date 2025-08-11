@@ -1,43 +1,43 @@
 package io.eaterythem.eaterythem.model;
 
-import java.util.*;
-
-import io.eaterythem.eaterythem.model.enums.*;
+import io.eaterythem.eaterythem.model.enums.EntryStatus;
+import io.eaterythem.eaterythem.model.enums.MealType;
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
-@Table(
-    name = "meal_entries",
-    uniqueConstraints = @UniqueConstraint(columnNames = {"meal_plan_id", "dayIndex", "mealType"})
-)
+@Table(name = "meal_entries")
 public class MealEntry {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-    @ManyToOne
-    private MealPlan mealPlan;
-
-    private int dayIndex;
+    private Integer dayIndex;
 
     @Enumerated(EnumType.STRING)
     private MealType mealType;
 
-    @OneToOne
+    @Enumerated(EnumType.STRING)
+    private EntryStatus status;
+
+    private String note;
+
+    @ManyToOne
+    @JoinColumn(name = "meal_plan_id")
+    private MealPlan mealPlan;
+
+    @ManyToOne
     @JoinColumn(name = "planned_recipe_id")
     private Recipe plannedRecipe;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "actual_recipe_id")
     private Recipe actualRecipe;
 
-    @Enumerated(EnumType.STRING)
-    private MealEntryStatus status = MealEntryStatus.PENDING;
-
-    private String note;
+    @OneToMany(mappedBy = "mealEntry")
+    private List<MealVote> votes;
 }
-

@@ -1,10 +1,9 @@
 package io.eaterythem.eaterythem.model;
 
-import java.util.*;
-
-import io.eaterythem.eaterythem.model.enums.*;
+import io.eaterythem.eaterythem.model.enums.MealType;
 import jakarta.persistence.*;
 import lombok.*;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,18 +12,19 @@ import lombok.*;
 @Table(name = "meal_cycles")
 public class MealCycle {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
     private String name;
 
     @Enumerated(EnumType.STRING)
     private MealType mealType;
 
-    @ManyToOne
-    private User user;
+    private boolean isPublic;
 
-    private boolean isPublic = false;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "cycle")
     private List<MealCycleRecipe> recipes;
