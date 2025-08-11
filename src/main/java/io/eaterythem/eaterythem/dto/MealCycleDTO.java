@@ -1,7 +1,7 @@
 package io.eaterythem.eaterythem.dto;
 
 import java.util.List;
-import java.util.UUID;
+
 
 import io.eaterythem.eaterythem.dto.Basic.BasicUserDTO;
 import io.eaterythem.eaterythem.model.enums.MealType;
@@ -12,7 +12,7 @@ import jakarta.validation.constraints.Size;
 
 @Data
 public class MealCycleDTO {
-    private UUID id;
+    private Integer id;
     
     @NotBlank(message = "Name is required")
     @Size(min = 2, max = 100, message = "Name must be between 2 and 100 characters")

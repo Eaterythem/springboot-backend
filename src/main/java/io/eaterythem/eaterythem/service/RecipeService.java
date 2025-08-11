@@ -30,7 +30,7 @@ public class RecipeService {
         return recipeDTOs;
     }
 
-    public List<RecipeDTO> getMeRecipes(UUID userId) {
+    public List<RecipeDTO> getMeRecipes(Integer userId) {
         List<Recipe> recipes = recipeRepository.findByUserId(userId);
         List<RecipeDTO> dtos = new ArrayList<>();
         for (Recipe recipe : recipes) {
@@ -39,14 +39,14 @@ public class RecipeService {
         return dtos;
     }
 
-    public RecipeDTO getRecipeById(UUID id) {
+    public RecipeDTO getRecipeById(Integer id) {
         Recipe recipe = recipeRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("Recipe not found"));
 
         return recipeMapper.toDTO(recipe);
     }
 
-    public RecipeDTO createRecipe(RecipeDTO recipeDTO, UUID userId) {
+    public RecipeDTO createRecipe(RecipeDTO recipeDTO, Integer userId) {
         Recipe recipe = recipeMapper.toEntity(recipeDTO);
         User user = new User();
         user.setId(userId);
@@ -65,7 +65,7 @@ public class RecipeService {
         return recipeMapper.toDTO(recipe);
     }
 
-    public RecipeDTO updateRecipe(UUID id, RecipeDTO recipeDTO, UUID userId) {
+    public RecipeDTO updateRecipe(Integer id, RecipeDTO recipeDTO, Integer userId) {
         Recipe recipe = recipeRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("Recipe not found"));
 
@@ -91,7 +91,7 @@ public class RecipeService {
         return recipeMapper.toDTO(recipe);
     }
 
-    public void deleteRecipe(UUID id, UUID userId) {
+    public void deleteRecipe(Integer id, Integer userId) {
         Recipe recipe = recipeRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("Recipe not found"));
 

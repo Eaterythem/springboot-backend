@@ -1,7 +1,7 @@
 package io.eaterythem.eaterythem.dto;
 
 import java.util.Date;
-import java.util.UUID;
+
 
 import io.eaterythem.eaterythem.dto.Basic.BasicUserDTO;
 import io.eaterythem.eaterythem.model.enums.MealPlanStatus;
@@ -11,7 +11,7 @@ import java.util.List;
 
 @Data
 public class MealPlanDTO {
-    private UUID id;
+    private Integer id;
     
     private BasicUserDTO user;
     

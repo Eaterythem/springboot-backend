@@ -9,9 +9,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import io.eaterythem.eaterythem.dto.LoginDTO;
-import io.eaterythem.eaterythem.dto.RegisterDTO;
 import io.eaterythem.eaterythem.dto.UserDTO;
+import io.eaterythem.eaterythem.dto.auth.LoginDTO;
+import io.eaterythem.eaterythem.dto.auth.RegisterDTO;
 import io.eaterythem.eaterythem.exception.BadRequestException;
 import io.eaterythem.eaterythem.mapper.UserMapper;
 import io.eaterythem.eaterythem.model.User;

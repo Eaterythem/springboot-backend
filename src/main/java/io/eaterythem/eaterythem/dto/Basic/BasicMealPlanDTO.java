@@ -1,14 +1,14 @@
 package io.eaterythem.eaterythem.dto.Basic;
 
 import java.util.Date;
-import java.util.UUID;
+
 
 import io.eaterythem.eaterythem.model.enums.MealPlanStatus;
 import lombok.Data;
 
 @Data
 public class BasicMealPlanDTO {
-    private UUID id;
+    private Integer id;
 
     private BasicUserDTO user;
     

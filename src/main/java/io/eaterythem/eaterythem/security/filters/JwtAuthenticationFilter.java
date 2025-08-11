@@ -11,7 +11,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
-import java.util.UUID;
+
 
 import io.eaterythem.eaterythem.security.UserPrincipal;
 import io.eaterythem.eaterythem.security.jwt.JwtUtil;
@@ -33,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String header = request.getHeader("Authorization");
         String token = null;
         String username = null;
-        UUID userId = null;
+        Integer userId = null;
         if (header != null && header.startsWith("Bearer ")) {
             token = header.substring(7);
             if (header != null && header.startsWith("Bearer ")) {
@@ -41,7 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 try {
                     if (jwtUtil.validateJwtToken(token)) {
                         username = jwtUtil.getUsernameFromToken(token);
-                        userId = UUID.fromString(jwtUtil.getUserIdFromToken(token));
+                        userId = Integer.parseInt(jwtUtil.getUserIdFromToken(token));
                     }
                 } catch (Exception ex) {
                     System.out.println("JWT validation failed: " + ex.getMessage());

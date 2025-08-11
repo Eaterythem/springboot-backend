@@ -4,7 +4,7 @@ import io.eaterythem.eaterythem.dto.UserDTO;
 import io.eaterythem.eaterythem.service.UserService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.UUID;
+
 
 @RestController
 @RequestMapping("/api/users")
@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public UserDTO getUserById(@PathVariable UUID id) {
+    public UserDTO getUserById(@PathVariable Integer id) {
         return userService.getUserById(id);
     }
 
@@ -31,12 +31,12 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public UserDTO updateUser(@PathVariable UUID id, @RequestBody UserDTO userDTO) {
+    public UserDTO updateUser(@PathVariable Integer id, @RequestBody UserDTO userDTO) {
         return userService.updateUser(id, userDTO);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable UUID id) {
+    public void deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
     }
 } 

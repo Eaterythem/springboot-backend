@@ -15,6 +15,8 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private User user;
+
     private String name;
 
     private String instructions;
@@ -24,7 +26,7 @@ public class Recipe {
     @Enumerated(EnumType.STRING)
     private MealType mealType;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST})
     @JoinTable(
         name = "recipe_tags",
         joinColumns = @JoinColumn(name = "recipe_id"),

@@ -1,13 +1,13 @@
 package io.eaterythem.eaterythem.dto;
 
 import java.util.List;
-import java.util.UUID;
+
 
 import lombok.Data;
 
 @Data
 public class UserDTO {
-    private UUID id;
+    private Integer id;
 
     private String email;
     

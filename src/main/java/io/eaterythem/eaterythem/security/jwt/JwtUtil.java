@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.security.Key;
 import java.util.Date;
-import java.util.UUID;
+
 
 @Component
 public class JwtUtil {
@@ -24,7 +24,7 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generateToken(String username, UUID userId) {
+    public String generateToken(String username, Integer userId) {
         return Jwts.builder()
                 .setSubject(username)
                 .claim("userId", userId.toString())

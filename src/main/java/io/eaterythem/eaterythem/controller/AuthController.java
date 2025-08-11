@@ -1,8 +1,8 @@
 package io.eaterythem.eaterythem.controller;
 
-import io.eaterythem.eaterythem.dto.RegisterDTO;
 import io.eaterythem.eaterythem.dto.UserDTO;
-import io.eaterythem.eaterythem.dto.LoginDTO;
+import io.eaterythem.eaterythem.dto.auth.LoginDTO;
+import io.eaterythem.eaterythem.dto.auth.RegisterDTO;
 import io.eaterythem.eaterythem.model.User;
 import io.eaterythem.eaterythem.security.UserPrincipal;
 import io.eaterythem.eaterythem.security.annotations.CurrentUser;

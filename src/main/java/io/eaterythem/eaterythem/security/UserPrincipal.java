@@ -1,7 +1,7 @@
 package io.eaterythem.eaterythem.security;
 
 import java.util.Collection;
-import java.util.UUID;
+
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -11,12 +11,12 @@ import lombok.Data;
 
 @Data
 public class UserPrincipal implements UserDetails {
-    private UUID userId;
+    private Integer userId;
     private String username;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserPrincipal(UUID userId, String username, String password,
+    public UserPrincipal(Integer userId, String username, String password,
                          Collection<? extends GrantedAuthority> authorities) {
         this.userId = userId;
         this.username = username;
@@ -24,7 +24,7 @@ public class UserPrincipal implements UserDetails {
         this.authorities = authorities;
     }
 
-    public UUID getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 

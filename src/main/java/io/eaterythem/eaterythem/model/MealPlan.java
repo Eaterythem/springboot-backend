@@ -1,6 +1,6 @@
 package io.eaterythem.eaterythem.model;
 
-import io.eaterythem.eaterythem.model.enums.PlanStatus;
+import io.eaterythem.eaterythem.model.enums.MealPlanStatus;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDate;
@@ -19,11 +19,17 @@ public class MealPlan {
     private LocalDate startDate;
 
     @Enumerated(EnumType.STRING)
-    private PlanStatus status;
+    private MealPlanStatus status;
 
-    private Integer breakfastCycle;
-    private Integer lunchCycle;
-    private Integer dinnerCycle;
+    @ManyToOne
+    @JoinColumn(name = "breakfast_cycle_id")
+    private MealCycle breakfastCycle;
+    @ManyToOne
+    @JoinColumn(name = "lunch_cycle_id")
+    private MealCycle lunchCycle;
+    @ManyToOne
+    @JoinColumn(name = "dinner_cycle_id")
+    private MealCycle dinnerCycle;
 
     private Integer breakfastIndex;
     private Integer lunchIndex;
@@ -33,9 +39,9 @@ public class MealPlan {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "mealPlan")
+    @OneToMany(mappedBy = "mealPlan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MealPlanParticipant> participants;
 
-    @OneToMany(mappedBy = "mealPlan")
+    @OneToMany(mappedBy = "mealPlan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MealEntry> mealEntries;
 }

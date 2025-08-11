@@ -7,7 +7,6 @@ import io.eaterythem.eaterythem.security.annotations.CurrentUser;
 import io.eaterythem.eaterythem.service.MealCycleService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/meal-cycles")
@@ -29,7 +28,7 @@ public class MealCycleController {
     }
 
     @GetMapping("/{id}")
-    public MealCycleDTO getMealCycleById(@PathVariable UUID id) {
+    public MealCycleDTO getMealCycleById(@PathVariable Integer id) {
         return mealCycleService.getMealCycleById(id);
     }
 
@@ -39,19 +38,19 @@ public class MealCycleController {
     }
 
     @PutMapping("/{id}")
-    public MealCycleDTO updateMealCycle(@PathVariable UUID id, @RequestBody MealCycleDTO mealCycleDTO,
+    public MealCycleDTO updateMealCycle(@PathVariable Integer id, @RequestBody MealCycleDTO mealCycleDTO,
             @CurrentUser UserPrincipal user) {
         return mealCycleService.updateMealCycle(id, mealCycleDTO, user.getUserId());
     }
 
     @PatchMapping("/{id}/recipes")
-    public MealCycleDTO updateMealCycleRecipes(@PathVariable UUID id, @RequestBody  List<MealCycleRecipeDTO> mealCycleRecipeDTOs,
+    public MealCycleDTO updateMealCycleRecipes(@PathVariable Integer id, @RequestBody  List<MealCycleRecipeDTO> mealCycleRecipeDTOs,
             @CurrentUser UserPrincipal user) {
         return mealCycleService.updateRecipes(id, mealCycleRecipeDTOs, user.getUserId());
     }
 
     @DeleteMapping("/{id}")
-    public void deleteMealCycle(@PathVariable UUID id, @CurrentUser UserPrincipal user) {
+    public void deleteMealCycle(@PathVariable Integer id, @CurrentUser UserPrincipal user) {
         mealCycleService.deleteMealCycle(id, user.getUserId());
     }
 }

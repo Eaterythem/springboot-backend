@@ -7,7 +7,6 @@ import io.eaterythem.eaterythem.service.RecipeService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/recipes")
@@ -29,7 +28,7 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}")
-    public RecipeDTO getRecipeById(@PathVariable UUID id) {
+    public RecipeDTO getRecipeById(@PathVariable Integer id) {
         return recipeService.getRecipeById(id);
     }
 
@@ -39,12 +38,12 @@ public class RecipeController {
     }
 
     @PutMapping("/{id}")
-    public RecipeDTO updateRecipe(@PathVariable UUID id, @RequestBody RecipeDTO recipeDTO, @CurrentUser UserPrincipal user) {
+    public RecipeDTO updateRecipe(@PathVariable Integer id, @RequestBody RecipeDTO recipeDTO, @CurrentUser UserPrincipal user) {
         return recipeService.updateRecipe(id, recipeDTO, user.getUserId());
     }
 
     @DeleteMapping("/{id}")
-    public void deleteRecipe(@PathVariable UUID id, @CurrentUser UserPrincipal user) {
+    public void deleteRecipe(@PathVariable Integer id, @CurrentUser UserPrincipal user) {
         recipeService.deleteRecipe(id, user.getUserId());
     }
 } 

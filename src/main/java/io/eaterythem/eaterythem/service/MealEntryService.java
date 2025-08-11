@@ -24,7 +24,7 @@ public class MealEntryService {
         return mealEntryDTOs;
     }
 
-    public MealEntryDTO getMealEntryById(UUID id) {
+    public MealEntryDTO getMealEntryById(Integer id) {
         MealEntry mealEntry = mealEntryRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("MealEntry not found"));
 
@@ -37,7 +37,7 @@ public class MealEntryService {
         return mealEntryMapper.toDTO(mealEntryRepository.save(mealEntry));
     }
 
-    public MealEntryDTO updateMealEntry(UUID id, MealEntryDTO mealEntryDTO, UUID userId) {
+    public MealEntryDTO updateMealEntry(Integer id, MealEntryDTO mealEntryDTO, Integer userId) {
         MealEntry mealEntry = mealEntryRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("MealEntry not found"));
 
@@ -59,7 +59,7 @@ public class MealEntryService {
         return mealEntryMapper.toDTO(mealEntryRepository.save(newMealEntry));
     }
 
-    public void deleteMealEntry(UUID id, UUID userId) {
+    public void deleteMealEntry(Integer id, Integer userId) {
         MealEntry mealEntry = mealEntryRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("MealEntry not found"));
 

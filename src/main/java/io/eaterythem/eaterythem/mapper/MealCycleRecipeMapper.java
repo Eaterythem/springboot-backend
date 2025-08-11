@@ -8,7 +8,7 @@ import java.util.List;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = "spring",unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {MealCycleMapper.class, RecipeMapper.class, BasicCycleMapper.class})
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {MealCycleMapper.class, RecipeMapper.class, BasicCycleMapper.class})
 public interface MealCycleRecipeMapper {
 
     MealCycleRecipeDTO toDTO(MealCycleRecipe mealCycleRecipe);

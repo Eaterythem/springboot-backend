@@ -25,20 +25,20 @@ public class MealPlanService {
         return mealPlanDTOs;
     }
 
-    public MealPlanDTO getMealPlanById(UUID id) {
+    public MealPlanDTO getMealPlanById(Integer id) {
         MealPlan mealPlan = mealPlanRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("MealPlan not found"));
 
         return mealPlanMapper.toDTO(mealPlan);
     }
 
-    public List<MealPlanDTO> getMePlans(UUID userId){
+    public List<MealPlanDTO> getMePlans(Integer userId){
         List<MealPlan> mealPlans = mealPlanRepository.getByUserId(userId);
         List<MealPlanDTO> mealPlanDTOs = mealPlanMapper.toDTO(mealPlans);
         return mealPlanDTOs;
     }
 
-    public MealPlanDTO createMealPlan(MealPlanDTO mealPlanDTO, UUID userId) {
+    public MealPlanDTO createMealPlan(MealPlanDTO mealPlanDTO, Integer userId) {
         MealPlan mealPlan = mealPlanMapper.toEntity(mealPlanDTO);
         User user = new User();
         user.setId(userId);
@@ -47,7 +47,7 @@ public class MealPlanService {
         return mealPlanMapper.toDTO(mealPlanRepository.save(mealPlan));
     }
 
-    public MealPlanDTO updateMealPlan(UUID id, MealPlanDTO mealPlanDTO, UUID userId) {
+    public MealPlanDTO updateMealPlan(Integer id, MealPlanDTO mealPlanDTO, Integer userId) {
         MealPlan mealPlan = mealPlanRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("MealPlan not found"));
 
@@ -61,7 +61,7 @@ public class MealPlanService {
         return mealPlanMapper.toDTO(mealPlanRepository.save(newPMealPlan));
     }
 
-    public void deleteMealPlan(UUID id, UUID userId) {
+    public void deleteMealPlan(Integer id, Integer userId) {
         MealPlan mealPlan = mealPlanRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("MealPlan not found"));
 

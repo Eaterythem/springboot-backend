@@ -7,7 +7,6 @@ import io.eaterythem.eaterythem.service.MealEntryService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/meal-entries")
@@ -24,7 +23,7 @@ public class MealEntryController {
     }
 
     @GetMapping("/{id}")
-    public MealEntryDTO getMealEntryById(@PathVariable UUID id) {
+    public MealEntryDTO getMealEntryById(@PathVariable Integer id) {
         return mealEntryService.getMealEntryById(id);
     }
 
@@ -34,12 +33,12 @@ public class MealEntryController {
     }
 
     @PutMapping("/{id}")
-    public MealEntryDTO updateMealEntry(@PathVariable UUID id, @RequestBody MealEntryDTO mealEntryDTO, @CurrentUser UserPrincipal user) {
+    public MealEntryDTO updateMealEntry(@PathVariable Integer id, @RequestBody MealEntryDTO mealEntryDTO, @CurrentUser UserPrincipal user) {
         return mealEntryService.updateMealEntry(id, mealEntryDTO, user.getUserId());
     }
 
     @DeleteMapping("/{id}")
-    public void deleteMealEntry(@PathVariable UUID id, @CurrentUser UserPrincipal user) {
+    public void deleteMealEntry(@PathVariable Integer id, @CurrentUser UserPrincipal user) {
         mealEntryService.deleteMealEntry(id, user.getUserId());
     }
 } 

@@ -36,20 +36,20 @@ public class MealCycleService {
         return mealCycleDTOs;
     }
 
-    public List<MealCycleDTO> getMeMealCycles(UUID userId) {
+    public List<MealCycleDTO> getMeMealCycles(Integer userId) {
         List<MealCycle> mealCycles = mealCycleRepository.findByUserId(userId);
         List<MealCycleDTO> mealCycleDTOs = mealCycleMapper.toDTO(mealCycles);
         return mealCycleDTOs;
     }
 
-    public MealCycleDTO getMealCycleById(UUID id) {
+    public MealCycleDTO getMealCycleById(Integer id) {
         MealCycle mealCycle = mealCycleRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("MealCycle not found"));
 
         return mealCycleMapper.toDTO(mealCycle);
     }
 
-    public MealCycleDTO createMealCycle(MealCycleDTO mealCycleDTO, UUID userId) {
+    public MealCycleDTO createMealCycle(MealCycleDTO mealCycleDTO, Integer userId) {
         MealCycle mealCycle = mealCycleMapper.toEntity(mealCycleDTO);
         User user = new User();
         user.setId(userId);
@@ -58,7 +58,7 @@ public class MealCycleService {
         return mealCycleMapper.toDTO(mealCycleRepository.save(mealCycle));
     }
 
-    public MealCycleDTO updateMealCycle(UUID id, MealCycleDTO mealCycleDTO, UUID userId) {
+    public MealCycleDTO updateMealCycle(Integer id, MealCycleDTO mealCycleDTO, Integer userId) {
         MealCycle mealCycle = mealCycleRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("MealCycle not found"));
 
@@ -78,7 +78,7 @@ public class MealCycleService {
         return mealCycleMapper.toDTO(mealCycleRepository.save(mealCycle));
     }
 
-    public void deleteMealCycle(UUID id, UUID userId) {
+    public void deleteMealCycle(Integer id, Integer userId) {
         MealCycle mealCycle = mealCycleRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("MealCycle not found"));
 
@@ -98,7 +98,7 @@ public class MealCycleService {
     }
 
     @Transactional
-    public MealCycleDTO updateRecipes(UUID id, List<MealCycleRecipeDTO> mealCycleRecipeDTOs, UUID userId) {
+    public MealCycleDTO updateRecipes(Integer id, List<MealCycleRecipeDTO> mealCycleRecipeDTOs, Integer userId) {
         MealCycle mealCycle = mealCycleRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("MealCycle not found"));
 
@@ -107,7 +107,7 @@ public class MealCycleService {
         }
 
         List<MealCycleRecipe> newCycleRecipes = new ArrayList<>();
-        List<UUID> newRecipeIds = new ArrayList<>();
+        List<Integer> newRecipeIds = new ArrayList<>();
 
         for (MealCycleRecipe recipe : mealCycleRecipeMapper.toEntity(mealCycleRecipeDTOs)) {
             if (recipe.getPosition() == null) {

@@ -1,6 +1,6 @@
 package io.eaterythem.eaterythem.model;
 
-import io.eaterythem.eaterythem.model.enums.EntryStatus;
+import io.eaterythem.eaterythem.model.enums.MealEntryStatus;
 import io.eaterythem.eaterythem.model.enums.MealType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -22,7 +22,7 @@ public class MealEntry {
     private MealType mealType;
 
     @Enumerated(EnumType.STRING)
-    private EntryStatus status;
+    private MealEntryStatus status;
 
     private String note;
 
@@ -38,6 +38,6 @@ public class MealEntry {
     @JoinColumn(name = "actual_recipe_id")
     private Recipe actualRecipe;
 
-    @OneToMany(mappedBy = "mealEntry")
+    @OneToMany(mappedBy = "mealEntry", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MealVote> votes;
 }

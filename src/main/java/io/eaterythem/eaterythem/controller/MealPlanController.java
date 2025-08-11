@@ -6,7 +6,6 @@ import io.eaterythem.eaterythem.security.annotations.CurrentUser;
 import io.eaterythem.eaterythem.service.MealPlanService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.UUID;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
@@ -25,7 +24,7 @@ public class MealPlanController {
     }
 
     @GetMapping("/{id}")
-    public MealPlanDTO getMealPlanById(@PathVariable UUID id) {
+    public MealPlanDTO getMealPlanById(@PathVariable Integer id) {
         return mealPlanService.getMealPlanById(id);
     }
 
@@ -41,12 +40,12 @@ public class MealPlanController {
     }
 
     @PutMapping("/{id}")
-    public MealPlanDTO updateMealPlan(@PathVariable UUID id, @RequestBody MealPlanDTO mealPlanDTO, @CurrentUser UserPrincipal user) {
+    public MealPlanDTO updateMealPlan(@PathVariable Integer id, @RequestBody MealPlanDTO mealPlanDTO, @CurrentUser UserPrincipal user) {
         return mealPlanService.updateMealPlan(id, mealPlanDTO, user.getUserId());
     }
 
     @DeleteMapping("/{id}")
-    public void deleteMealPlan(@PathVariable UUID id, @CurrentUser UserPrincipal user) {
+    public void deleteMealPlan(@PathVariable Integer id, @CurrentUser UserPrincipal user) {
         mealPlanService.deleteMealPlan(id, user.getUserId());
     }
 } 

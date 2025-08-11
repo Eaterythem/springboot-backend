@@ -1,6 +1,6 @@
-package io.eaterythem.eaterythem.dto;
+package io.eaterythem.eaterythem.dto.auth;
 
-import java.util.UUID;
+
 
 import lombok.Data;
 import jakarta.validation.constraints.Email;
@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Size;
 
 @Data
 public class RegisterDTO {
-    private UUID id;
+    private Integer id;
 
     @NotBlank(message = "Email is required")
     @Email(message = "Invalid email format")

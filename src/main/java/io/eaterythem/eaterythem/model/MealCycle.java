@@ -26,7 +26,7 @@ public class MealCycle {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "cycle")
+    @OneToMany(mappedBy = "cycle", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MealCycleRecipe> recipes;
 
     @ManyToMany
