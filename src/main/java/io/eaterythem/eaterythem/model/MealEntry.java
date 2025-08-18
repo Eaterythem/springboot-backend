@@ -1,13 +1,13 @@
 package io.eaterythem.eaterythem.model;
 
 import io.eaterythem.eaterythem.model.enums.MealEntryStatus;
-import io.eaterythem.eaterythem.model.enums.MealType;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Data
 @Entity
 @Table(name = "meal_entries")
@@ -16,13 +16,12 @@ public class MealEntry {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer dayIndex;
+    @Builder.Default
+    private Integer dayIndex = 1;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private MealType mealType;
-
-    @Enumerated(EnumType.STRING)
-    private MealEntryStatus status;
+    private MealEntryStatus status = MealEntryStatus.PENDING;
 
     private String note;
 

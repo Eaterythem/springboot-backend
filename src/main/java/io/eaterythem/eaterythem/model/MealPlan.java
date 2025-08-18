@@ -16,6 +16,8 @@ public class MealPlan {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String name;
+
     private LocalDate startDate;
 
     @Enumerated(EnumType.STRING)
@@ -34,10 +36,6 @@ public class MealPlan {
     private Integer breakfastIndex;
     private Integer lunchIndex;
     private Integer dinnerIndex;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 
     @OneToMany(mappedBy = "mealPlan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MealPlanParticipant> participants;

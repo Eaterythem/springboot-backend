@@ -7,6 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@Builder
 @Entity
 @Table(name = "meal_plan_participants",
        uniqueConstraints = @UniqueConstraint(columnNames = {"meal_plan_id", "user_id"}))

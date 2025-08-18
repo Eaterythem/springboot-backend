@@ -5,7 +5,9 @@ import io.eaterythem.eaterythem.exception.BadRequestException;
 import io.eaterythem.eaterythem.exception.UnauthorizedException;
 import io.eaterythem.eaterythem.mapper.MealEntryMapper;
 import io.eaterythem.eaterythem.model.MealEntry;
+import io.eaterythem.eaterythem.model.enums.ParticipantRole;
 import io.eaterythem.eaterythem.repository.MealEntryRepository;
+import io.eaterythem.eaterythem.repository.MealPlanParticipantRepository;
 import lombok.AllArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import java.util.*;
 @Service
 public class MealEntryService {
     MealEntryRepository mealEntryRepository;
+    MealPlanParticipantRepository mealPlanParticipantRepository;
 
     MealEntryMapper mealEntryMapper;
 
@@ -41,7 +44,7 @@ public class MealEntryService {
         MealEntry mealEntry = mealEntryRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("MealEntry not found"));
 
-        if (!mealEntry.getMealPlan().getUser().getId().equals(userId)) {
+        if (mealPlanParticipantRepository.getUserRole(userId, mealEntry.getMealPlan().getId()) != ParticipantRole.OWNER) {
             throw new UnauthorizedException("Only Plan Owner can edit MealEntery");
         }
 
@@ -63,7 +66,7 @@ public class MealEntryService {
         MealEntry mealEntry = mealEntryRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("MealEntry not found"));
 
-        if (!mealEntry.getMealPlan().getUser().getId().equals(userId)) {
+        if (mealPlanParticipantRepository.getUserRole(userId, mealEntry.getMealPlan().getId()) != ParticipantRole.OWNER) {
             throw new UnauthorizedException("Only Plan Owner can delete MealEntery");
         }
 

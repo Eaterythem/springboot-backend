@@ -22,9 +22,6 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user")
-    private List<MealPlan> mealPlans;
-
-    @OneToMany(mappedBy = "user")
     private List<MealPlanParticipant> mealPlanParticipants;
 
     @OneToMany(mappedBy = "user")
@@ -38,4 +35,7 @@ public class User {
 
     @ManyToMany(mappedBy = "sharedWith")
     private List<MealCycle> sharedCycles;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Friendship> friendRequests;
 }

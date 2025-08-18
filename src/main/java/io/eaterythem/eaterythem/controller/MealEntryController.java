@@ -4,18 +4,17 @@ import io.eaterythem.eaterythem.dto.MealEntryDTO;
 import io.eaterythem.eaterythem.security.UserPrincipal;
 import io.eaterythem.eaterythem.security.annotations.CurrentUser;
 import io.eaterythem.eaterythem.service.MealEntryService;
+import lombok.AllArgsConstructor;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/api/meal-entries")
 public class MealEntryController {
     private final MealEntryService mealEntryService;
-
-    public MealEntryController(MealEntryService mealEntryService) {
-        this.mealEntryService = mealEntryService;
-    }
 
     @GetMapping
     public List<MealEntryDTO> getAllMealEntries() {
