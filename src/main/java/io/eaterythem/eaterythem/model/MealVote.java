@@ -8,8 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Data
 @Entity
-@Table(name = "meal_votes",
-       uniqueConstraints = @UniqueConstraint(columnNames = {"meal_entry_id", "user_id"}))
+@Table(name = "meal_votes", uniqueConstraints = @UniqueConstraint(columnNames = { "meal_entry_id", "user_id" }))
 public class MealVote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -2,7 +2,6 @@ package io.eaterythem.eaterythem.dto;
 
 import java.util.Date;
 
-
 import io.eaterythem.eaterythem.model.enums.MealPlanStatus;
 import lombok.Data;
 import jakarta.validation.constraints.NotNull;
@@ -33,4 +32,6 @@ public class MealPlanDTO {
     private int lunchIndex;
     
     private int dinnerIndex;
+
+    private List<MealPlanParticipantDTO> participants;
 }
