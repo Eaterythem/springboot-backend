@@ -1,6 +1,9 @@
 package io.eaterythem.eaterythem.controller;
 
 import io.eaterythem.eaterythem.dto.UserDTO;
+import io.eaterythem.eaterythem.dto.UserProfileDTO;
+import io.eaterythem.eaterythem.security.UserPrincipal;
+import io.eaterythem.eaterythem.security.annotations.CurrentUser;
 import io.eaterythem.eaterythem.service.UserService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -18,6 +21,14 @@ public class UserController {
     @GetMapping
     public List<UserDTO> getAllUsers() {
         return userService.getAllUsers();
+    }
+
+    @GetMapping("/me")
+    public UserProfileDTO me(@CurrentUser UserPrincipal user) {
+
+        UserProfileDTO userProfileDTO = userService.me(user.getUserId());
+        
+        return userProfileDTO;
     }
 
     @GetMapping("/{id}")
