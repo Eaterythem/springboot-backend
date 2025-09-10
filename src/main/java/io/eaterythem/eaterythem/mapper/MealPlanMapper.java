@@ -7,9 +7,10 @@ import java.util.List;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.ReportingPolicy;
 
 
-@Mapper(componentModel = "spring", uses = {MealCycleMapper.class, MealEntryMapper.class, ParticipantMapper.class})
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {MealCycleMapper.class, MealEntryMapper.class, ParticipantMapper.class})
 public interface MealPlanMapper {
 
     @Mapping(source = "mealEntries", target = "entries")

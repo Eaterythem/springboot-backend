@@ -48,7 +48,7 @@ public class MealPlanService {
 
     public MealPlanDTO createMealPlan(MealPlanDTO mealPlanDTO, Integer userId) {
         MealPlan mealPlan = mealPlanMapper.toEntity(mealPlanDTO);
-        
+
         MealCycle mealCycle;
         if ((mealCycle = mealPlan.getBreakfastCycle()) != null) {
             mealEntryService.createMealEntry(
@@ -74,7 +74,7 @@ public class MealPlanService {
                                     .mealPlan(mealPlan)
                                     .build()));
         }
-        
+
         User user = new User();
         user.setId(userId);
 
@@ -93,7 +93,6 @@ public class MealPlanService {
         MealPlan mealPlan = mealPlanRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("MealPlan not found"));
 
-        
         if (mealPlanParticipantRepository.getUserRole(userId, mealPlan.getId()) != ParticipantRole.OWNER) {
             throw new UnauthorizedException("Only Plan Owner can edit");
         }

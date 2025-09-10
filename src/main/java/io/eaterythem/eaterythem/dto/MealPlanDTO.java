@@ -27,11 +27,11 @@ public class MealPlanDTO {
     
     private List<MealEntryDTO> entries;
     
-    private int breakfastIndex;
+    private MealEntryDTO breakfastEntry;
     
-    private int lunchIndex;
+    private MealEntryDTO lunchEntry;
     
-    private int dinnerIndex;
+    private MealEntryDTO dinnerEntry;
 
     private List<MealPlanParticipantDTO> participants;
 }
