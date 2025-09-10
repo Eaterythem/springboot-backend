@@ -4,6 +4,7 @@ import io.eaterythem.eaterythem.model.enums.VoteType;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

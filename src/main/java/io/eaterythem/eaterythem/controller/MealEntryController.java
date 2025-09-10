@@ -1,6 +1,7 @@
 package io.eaterythem.eaterythem.controller;
 
 import io.eaterythem.eaterythem.dto.MealEntryDTO;
+import io.eaterythem.eaterythem.dto.MealVoteDTO;
 import io.eaterythem.eaterythem.security.UserPrincipal;
 import io.eaterythem.eaterythem.security.annotations.CurrentUser;
 import io.eaterythem.eaterythem.service.MealEntryService;
@@ -19,6 +20,11 @@ public class MealEntryController {
     @GetMapping
     public List<MealEntryDTO> getAllMealEntries() {
         return mealEntryService.getAllMealEntries();
+    }
+    
+    @PostMapping("/{id}/vote")
+    public MealEntryDTO voteMealEntry(@PathVariable Integer id, @RequestBody MealVoteDTO voteDTO, @CurrentUser UserPrincipal user) {
+        return mealEntryService.vote(id, voteDTO, user.getUserId());
     }
 
     @GetMapping("/{id}")
@@ -40,4 +46,4 @@ public class MealEntryController {
     public void deleteMealEntry(@PathVariable Integer id, @CurrentUser UserPrincipal user) {
         mealEntryService.deleteMealEntry(id, user.getUserId());
     }
-} 
+}

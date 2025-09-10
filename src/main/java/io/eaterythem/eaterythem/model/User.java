@@ -8,6 +8,7 @@ import java.util.List;
 
 import io.eaterythem.eaterythem.model.enums.FriendshipStatus;
 
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

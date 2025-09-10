@@ -1,13 +1,19 @@
 package io.eaterythem.eaterythem.service;
 
 import io.eaterythem.eaterythem.dto.MealEntryDTO;
+import io.eaterythem.eaterythem.dto.MealVoteDTO;
 import io.eaterythem.eaterythem.exception.BadRequestException;
 import io.eaterythem.eaterythem.exception.UnauthorizedException;
 import io.eaterythem.eaterythem.mapper.MealEntryMapper;
 import io.eaterythem.eaterythem.model.MealEntry;
+import io.eaterythem.eaterythem.model.MealPlanParticipant;
+import io.eaterythem.eaterythem.model.MealVote;
+import io.eaterythem.eaterythem.model.User;
 import io.eaterythem.eaterythem.model.enums.ParticipantRole;
 import io.eaterythem.eaterythem.repository.MealEntryRepository;
 import io.eaterythem.eaterythem.repository.MealPlanParticipantRepository;
+import io.eaterythem.eaterythem.repository.MealPlanRepository;
+import io.eaterythem.eaterythem.tools.ObjectMerger;
 import lombok.AllArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -17,6 +23,7 @@ import java.util.*;
 @Service
 public class MealEntryService {
     MealEntryRepository mealEntryRepository;
+    MealPlanRepository mealPlanRepository;
     MealPlanParticipantRepository mealPlanParticipantRepository;
 
     MealEntryMapper mealEntryMapper;
@@ -44,20 +51,13 @@ public class MealEntryService {
         MealEntry mealEntry = mealEntryRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("MealEntry not found"));
 
-        if (mealPlanParticipantRepository.getUserRole(userId, mealEntry.getMealPlan().getId()) != ParticipantRole.OWNER) {
+        if (mealPlanParticipantRepository.getUserRole(userId,
+                mealEntry.getMealPlan().getId()) != ParticipantRole.OWNER) {
             throw new UnauthorizedException("Only Plan Owner can edit MealEntery");
         }
 
-        MealEntry newMealEntry = mealEntryMapper.toEntity(mealEntryDTO);
-        newMealEntry.setId(mealEntry.getId());
-
-        // mealEntry.setDayIndex(newMealEntry.getDayIndex());
-        // mealEntry.setMealPlan(newMealEntry.getMealPlan());
-        // mealEntry.setMealType(newMealEntry.getMealType());
-        // mealEntry.setPlannedRecipe(newMealEntry.getPlannedRecipe());
-        // mealEntry.setActualRecipe(newMealEntry.getActualRecipe());
-        // mealEntry.setStatus(newMealEntry.getStatus());
-        // mealEntry.setNote(newMealEntry.getNote());
+        System.out.println(mealEntryMapper.toEntity(mealEntryDTO));
+        MealEntry newMealEntry = ObjectMerger.mergeNonNullFields(mealEntry, mealEntryMapper.toEntity(mealEntryDTO));
 
         return mealEntryMapper.toDTO(mealEntryRepository.save(newMealEntry));
     }
@@ -66,11 +66,39 @@ public class MealEntryService {
         MealEntry mealEntry = mealEntryRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("MealEntry not found"));
 
-        if (mealPlanParticipantRepository.getUserRole(userId, mealEntry.getMealPlan().getId()) != ParticipantRole.OWNER) {
+        if (mealPlanParticipantRepository.getUserRole(userId,
+                mealEntry.getMealPlan().getId()) != ParticipantRole.OWNER) {
             throw new UnauthorizedException("Only Plan Owner can delete MealEntery");
         }
 
         mealEntryRepository.deleteById(id);
 
+    }
+
+
+    public MealEntryDTO vote(Integer mealEntryId, MealVoteDTO voteDTO, Integer userId){
+        MealEntry mealEntry = mealEntryRepository.findById(mealEntryId)
+                .orElseThrow(() -> new BadRequestException("Entry Not Found"));
+
+        MealPlanParticipant participant = null;
+        for (MealPlanParticipant p : mealEntry.getMealPlan().getParticipants()) {
+            if (p.getUser().getId() == userId) {
+                participant = p;
+                break;
+            }
+        }
+
+        if (participant == null || participant.getRole() == ParticipantRole.VIEWER)
+            throw new BadRequestException("User not allowed to vote");
+
+        mealEntry.getVotes().add(MealVote.builder()
+        .mealEntry(mealEntry)
+        .voteType(voteDTO.getVoteType())
+        .note(voteDTO.getNote())
+        .user(User.builder().id(userId).build())
+        .build()
+        );
+
+        return mealEntryMapper.toDTO(mealEntryRepository.save(mealEntry));
     }
 }

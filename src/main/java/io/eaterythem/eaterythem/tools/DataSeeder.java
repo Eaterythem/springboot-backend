@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,8 @@ public class DataSeeder implements CommandLineRunner {
 
     @Autowired
     private UserRepository userRepo;
+    @Autowired
+    private FriendshipRepository friendshipRepo;
     @Autowired
     private RecipeRepository recipeRepo;
     @Autowired
@@ -50,8 +53,13 @@ public class DataSeeder implements CommandLineRunner {
         jane.setName("Jane Smith");
         jane.setEmail("jane@example.com");
         jane.setPassword(passwordEncoder.encode("pass5678"));
-        jane = userRepo.save(jane);
 
+        jane = userRepo.save(jane);
+        
+        friendshipRepo.save(new Friendship(null, jane, user, FriendshipStatus.ACCEPTED, LocalDateTime.now()));
+        friendshipRepo.save(new Friendship(null, user, jane, FriendshipStatus.BLOCKED, LocalDateTime.now()));
+        friendshipRepo.save(new Friendship(null, jane, user, FriendshipStatus.PENDING, LocalDateTime.now()));
+        
         // ===== Create recipes =====
         Recipe r1 = new Recipe();
         r1.setName("Pancakes");
@@ -127,6 +135,8 @@ public class DataSeeder implements CommandLineRunner {
                 .mealPlan(plan)
                 .role(ParticipantRole.OWNER)
                 .build());
+
+        plan.setName("plan 1");
         plan.setParticipants(pp);
         plan.setStartDate(LocalDate.now());
         plan.setStatus(MealPlanStatus.ACTIVE);
