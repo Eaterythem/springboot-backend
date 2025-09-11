@@ -13,6 +13,7 @@ import io.eaterythem.eaterythem.model.enums.ParticipantRole;
 import io.eaterythem.eaterythem.repository.MealEntryRepository;
 import io.eaterythem.eaterythem.repository.MealPlanParticipantRepository;
 import io.eaterythem.eaterythem.repository.MealPlanRepository;
+import io.eaterythem.eaterythem.repository.RecipeRepository;
 import io.eaterythem.eaterythem.tools.ObjectMerger;
 import lombok.AllArgsConstructor;
 
@@ -22,6 +23,8 @@ import java.util.*;
 @AllArgsConstructor
 @Service
 public class MealEntryService {
+
+    RecipeRepository recipeRepository;
     MealEntryRepository mealEntryRepository;
     MealPlanRepository mealPlanRepository;
     MealPlanParticipantRepository mealPlanParticipantRepository;
@@ -75,29 +78,41 @@ public class MealEntryService {
 
     }
 
-
-    public MealEntryDTO vote(Integer mealEntryId, MealVoteDTO voteDTO, Integer userId){
+    public MealEntryDTO vote(Integer mealEntryId, MealVoteDTO voteDTO, Integer userId) {
         MealEntry mealEntry = mealEntryRepository.findById(mealEntryId)
                 .orElseThrow(() -> new BadRequestException("Entry Not Found"));
 
-        MealPlanParticipant participant = null;
-        for (MealPlanParticipant p : mealEntry.getMealPlan().getParticipants()) {
-            if (p.getUser().getId() == userId) {
-                participant = p;
-                break;
-            }
+        MealPlanParticipant participant = mealEntry.getMealPlan().getParticipants().stream()
+                .filter(p -> p.getUser().getId().equals(userId))
+                .findFirst()
+                .orElse(null);
+
+        if (participant == null || participant.getRole() == ParticipantRole.VIEWER) {
+            throw new BadRequestException("User not allowed to vote");
         }
 
-        if (participant == null || participant.getRole() == ParticipantRole.VIEWER)
-            throw new BadRequestException("User not allowed to vote");
+        // 🔑 Check if the user has already voted
+        MealVote existingVote = mealEntry.getVotes().stream()
+                .filter(v -> v.getUser().getId().equals(userId))
+                .findFirst()
+                .orElse(null);
 
-        mealEntry.getVotes().add(MealVote.builder()
-        .mealEntry(mealEntry)
-        .voteType(voteDTO.getVoteType())
-        .note(voteDTO.getNote())
-        .user(User.builder().id(userId).build())
-        .build()
-        );
+        if (existingVote != null) {
+            // update existing vote
+            existingVote.setVoteType(voteDTO.getVoteType());
+            existingVote.setNote(voteDTO.getNote());
+            if (voteDTO.getReplacementRecipe() != null)
+            existingVote.setReplacementRecipe(recipeRepository.findById(voteDTO.getReplacementRecipe().getId()).orElse(null));
+        } else {
+            mealEntry.getVotes().add(MealVote.builder()
+                    .mealEntry(mealEntry)
+                    .voteType(voteDTO.getVoteType())
+                    .note(voteDTO.getNote())
+                    .user(User.builder().id(userId).build())
+                    .replacementRecipe(voteDTO.getReplacementRecipe() == null? null : recipeRepository.findById(voteDTO.getReplacementRecipe().getId()).orElse(null))
+                    .build());
+
+        }
 
         return mealEntryMapper.toDTO(mealEntryRepository.save(mealEntry));
     }

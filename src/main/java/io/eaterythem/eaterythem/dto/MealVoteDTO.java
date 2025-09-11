@@ -1,5 +1,6 @@
 package io.eaterythem.eaterythem.dto;
 
+import io.eaterythem.eaterythem.dto.Basic.BasicUserDTO;
 import io.eaterythem.eaterythem.model.enums.VoteType;
 import lombok.Data;
 
@@ -9,5 +10,6 @@ public class MealVoteDTO {
     VoteType voteType;
     Integer mealEntryId;
     String note;
+    BasicUserDTO user;
     RecipeDTO replacementRecipe;
 }
