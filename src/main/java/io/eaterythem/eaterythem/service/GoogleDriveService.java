@@ -10,17 +10,22 @@ import com.google.api.services.drive.model.Permission;
 
 import io.eaterythem.eaterythem.tools.GoogleDriveUtils;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Collections;
 
 @Service
 public class GoogleDriveService {
     
     private static final GsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     private final Drive driveService;
+
+    @Value("${google.drive.parent-folder-id}")
+    private String parentFolderId;
 
     public GoogleDriveService() throws Exception {
         InputStream in = new FileInputStream("src/main/resources/credentials.json");
@@ -38,6 +43,7 @@ public class GoogleDriveService {
     public String uploadFile(MultipartFile multipartFile) throws Exception {
         File fileMetadata = new File();
         fileMetadata.setName(multipartFile.getOriginalFilename());
+        fileMetadata.setParents(Collections.singletonList(parentFolderId));
 
         InputStreamContent mediaContent =
                 new InputStreamContent(multipartFile.getContentType(), multipartFile.getInputStream());
