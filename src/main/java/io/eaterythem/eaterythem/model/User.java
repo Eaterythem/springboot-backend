@@ -19,6 +19,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String profilePicUrl;
+
     private String name;
 
     @Column(unique = true)

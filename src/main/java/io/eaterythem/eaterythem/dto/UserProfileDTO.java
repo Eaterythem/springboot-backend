@@ -9,6 +9,8 @@ import lombok.Data;
 public class UserProfileDTO {
     private Integer id;
 
+    private String profilePicUrl;
+
     private String name;
     
     private String email;
