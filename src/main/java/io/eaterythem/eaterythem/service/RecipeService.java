@@ -54,6 +54,7 @@ public class RecipeService {
 
         List<Tag> resolvedTags = new ArrayList<>();
         for (Tag t : recipe.getTags()) {
+            t.setName(t.getName().toLowerCase().strip());
             Tag resolvedTag = tagRepository.findByName(t.getName())
                     .orElseGet(() -> tagRepository.save(t));
             resolvedTags.add(resolvedTag);
@@ -95,7 +96,7 @@ public class RecipeService {
         Recipe recipe = recipeRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("Recipe not found"));
 
-        if (recipe.getUser() == null || recipe.getUser().getId().equals(userId)){
+        if (recipe.getUser() == null || !recipe.getUser().getId().equals(userId)){
             throw new UnauthorizedException("Only recipe creator can Delete it");
         }
 

@@ -59,7 +59,6 @@ public class MealEntryService {
             throw new UnauthorizedException("Only Plan Owner can edit MealEntery");
         }
 
-        System.out.println(mealEntryMapper.toEntity(mealEntryDTO));
         MealEntry newMealEntry = ObjectMerger.mergeNonNullFields(mealEntry, mealEntryMapper.toEntity(mealEntryDTO));
 
         return mealEntryMapper.toDTO(mealEntryRepository.save(newMealEntry));

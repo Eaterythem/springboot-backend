@@ -3,6 +3,7 @@ package io.eaterythem.eaterythem.controller;
 import io.eaterythem.eaterythem.dto.UserDTO;
 import io.eaterythem.eaterythem.dto.auth.LoginDTO;
 import io.eaterythem.eaterythem.dto.auth.RegisterDTO;
+import io.eaterythem.eaterythem.mapper.BasicUserMapper;
 import io.eaterythem.eaterythem.model.User;
 import io.eaterythem.eaterythem.security.UserPrincipal;
 import io.eaterythem.eaterythem.security.annotations.CurrentUser;
@@ -24,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 public class AuthController {
     private final JwtUtil jwtUtil;
     private final AuthService authService;
+    private final BasicUserMapper basicUserMapper;
 
     @PostMapping("/register")
     public Map<String, Object> register(@RequestBody @Valid RegisterDTO registerDTO) {
@@ -44,6 +46,7 @@ public class AuthController {
         String token = jwtUtil.generateToken(user.getEmail(), user.getId());
         Map<String, Object> response = new HashMap<>();
         response.put("token", token);
+        response.put("user", basicUserMapper.toDTO(user));
         return response;
     }
 
