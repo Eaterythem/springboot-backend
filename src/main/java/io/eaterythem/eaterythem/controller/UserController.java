@@ -11,6 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+
 
 @AllArgsConstructor
 @RestController
@@ -35,7 +41,6 @@ public class UserController {
     public UserDTO getUserById(@PathVariable Integer id) {
         return userService.getUserById(id);
     }
-
 
     @PostMapping("/upload-profile-pic")
     public UserDTO uploadProfilePic(@CurrentUser UserPrincipal user, @RequestParam("file") MultipartFile file) throws Exception {
