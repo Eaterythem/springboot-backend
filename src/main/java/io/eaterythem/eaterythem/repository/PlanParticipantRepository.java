@@ -13,7 +13,7 @@ public interface PlanParticipantRepository extends JpaRepository<Plan, Integer> 
     @Query("SELECT p.role " +
         "FROM PlanParticipant p " +
         "WHERE p.user.id = :userId " +
-        "AND p.Plan.id = :PlanId")
+        "AND p.plan.id = :planId")
     ParticipantRole getUserRole(@Param("userId") int userId,
-                                @Param("PlanId") int PlanId);
+                                @Param("planId") int planId);
 } 

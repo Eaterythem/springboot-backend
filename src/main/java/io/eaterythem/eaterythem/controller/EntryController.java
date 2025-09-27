@@ -15,35 +15,35 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("/api/entries")
 public class EntryController {
-    private final EntryService EntryService;
+    private final EntryService entryService;
 
     @GetMapping
     public List<EntryDTO> getAllEntries() {
-        return EntryService.getAllEntries();
+        return entryService.getAllEntries();
     }
     
     @PostMapping("/{id}/vote")
     public EntryDTO voteEntry(@PathVariable Integer id, @RequestBody VoteDTO voteDTO, @CurrentUser UserPrincipal user) {
-        return EntryService.vote(id, voteDTO, user.getUserId());
+        return entryService.vote(id, voteDTO, user.getUserId());
     }
 
     @GetMapping("/{id}")
     public EntryDTO getEntryById(@PathVariable Integer id) {
-        return EntryService.getEntryById(id);
+        return entryService.getEntryById(id);
     }
 
     @PostMapping
     public EntryDTO createEntry(@RequestBody EntryDTO EntryDTO) {
-        return EntryService.createEntry(EntryDTO);
+        return entryService.createEntry(EntryDTO);
     }
 
     @PutMapping("/{id}")
     public EntryDTO updateEntry(@PathVariable Integer id, @RequestBody EntryDTO EntryDTO, @CurrentUser UserPrincipal user) {
-        return EntryService.updateEntry(id, EntryDTO, user.getUserId());
+        return entryService.updateEntry(id, EntryDTO, user.getUserId());
     }
 
     @DeleteMapping("/{id}")
     public void deleteEntry(@PathVariable Integer id, @CurrentUser UserPrincipal user) {
-        EntryService.deleteEntry(id, user.getUserId());
+        entryService.deleteEntry(id, user.getUserId());
     }
 }

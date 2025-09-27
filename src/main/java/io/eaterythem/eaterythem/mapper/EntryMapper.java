@@ -11,9 +11,9 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {RecipeMapper.class, BasicPlanMapper.class, VoteMapper.class})
 public interface EntryMapper {
 
-    EntryDTO toDTO(Entry Entry);
+    EntryDTO toDTO(Entry entry);
     
-    Entry toEntity(EntryDTO EntryDTO);
+    Entry toEntity(EntryDTO entryDTO);
 
-    List<EntryDTO> toDTO(List<Entry> Entries);
+    List<EntryDTO> toDTO(List<Entry> entries);
 } 

@@ -17,9 +17,9 @@ public class UserDTO {
 
     private List<RecipeDTO> recipes;
 
-    private List<PlanDTO> Plans;
+    private List<PlanDTO> plans;
 
-    private List<CycleDTO> Cycles;
+    private List<CycleDTO> cycles;
 
     private List<CycleDTO> sharedCycles;
 }

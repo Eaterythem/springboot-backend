@@ -5,17 +5,17 @@ import io.eaterythem.eaterythem.dto.CycleRecipeDTO;
 import io.eaterythem.eaterythem.security.UserPrincipal;
 import io.eaterythem.eaterythem.security.annotations.CurrentUser;
 import io.eaterythem.eaterythem.service.CycleService;
+import lombok.AllArgsConstructor;
+
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api/cycles")
 public class CycleController {
     private final CycleService CycleService;
-
-    public CycleController(CycleService CycleService) {
-        this.CycleService = CycleService;
-    }
 
     @GetMapping
     public List<CycleDTO> getAllCycles() {

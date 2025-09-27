@@ -8,7 +8,7 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring", uses = {BasicUserMapper.class}, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface BasicPlanMapper {
     
-    BasicPlanDTO toDTO(Plan Plan);
+    BasicPlanDTO toDTO(Plan plan);
 
     Plan toEntity(BasicPlanDTO basicPlanDTO);
 }

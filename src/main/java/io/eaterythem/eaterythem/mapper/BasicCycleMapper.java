@@ -9,7 +9,7 @@ import io.eaterythem.eaterythem.model.Cycle;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = { BasicUserMapper.class, CycleMapper.class, TagMapper.class, RecipeMapper.class })
 public interface BasicCycleMapper {
 
-    Cycle toEntity(CycleDTO CycleDTO);
+    Cycle toEntity(CycleDTO cycleDTO);
 
-    CycleDTO toDTO(Cycle Cycle);
+    CycleDTO toDTO(Cycle cycle);
 }

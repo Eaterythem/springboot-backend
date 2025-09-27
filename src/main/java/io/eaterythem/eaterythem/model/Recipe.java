@@ -37,5 +37,5 @@ public class Recipe {
     private List<Tag> tags;
 
     @OneToMany(mappedBy = "recipe")
-    private List<CycleRecipe> CycleRecipes;
+    private List<CycleRecipe> cycleRecipes;
 }

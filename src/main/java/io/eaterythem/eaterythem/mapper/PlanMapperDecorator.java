@@ -19,41 +19,41 @@ import io.eaterythem.eaterythem.repository.PlanRepository;
 public class PlanMapperDecorator implements PlanMapper {
 
     private final PlanMapper delegate;
-    private final EntryMapper EntryMapper;
-    private final PlanRepository PlanRepository;
+    private final EntryMapper entryMapper;
+    private final PlanRepository planRepository;
 
     public PlanMapperDecorator(
             @Qualifier("planMapperImpl") PlanMapper delegate,
-            EntryMapper EntryMapper,
-            PlanRepository PlanRepository
+            EntryMapper entryMapper,
+            PlanRepository planRepository
     ) {
         this.delegate = delegate;
-        this.EntryMapper = EntryMapper;
-        this.PlanRepository = PlanRepository;
+        this.entryMapper = entryMapper;
+        this.planRepository = planRepository;
     }
 
     @Override
-    public PlanDTO toDTO(Plan Plan) {
-        PlanDTO dto = delegate.toDTO(Plan);
-        dto.setBreakfastEntry(EntryMapper.toDTO(getOrCreateEntry(Plan, MealType.BREAKFAST)));
-        dto.setLunchEntry(EntryMapper.toDTO(getOrCreateEntry(Plan, MealType.LUNCH)));
-        dto.setDinnerEntry(EntryMapper.toDTO(getOrCreateEntry(Plan, MealType.DINNER)));
-        dto.setEntries(EntryMapper.toDTO(Plan.getEntries()));
+    public PlanDTO toDTO(Plan plan) {
+        PlanDTO dto = delegate.toDTO(plan);
+        dto.setBreakfastEntry(entryMapper.toDTO(getOrCreateEntry(plan, MealType.BREAKFAST)));
+        dto.setLunchEntry(entryMapper.toDTO(getOrCreateEntry(plan, MealType.LUNCH)));
+        dto.setDinnerEntry(entryMapper.toDTO(getOrCreateEntry(plan, MealType.DINNER)));
+        dto.setEntries(entryMapper.toDTO(plan.getEntries()));
         return dto;
     }
 
     @Override
-    public List<PlanDTO> toDTO(List<Plan> Plans) {
-        return Plans.stream().map(this::toDTO).toList();
+    public List<PlanDTO> toDTO(List<Plan> plans) {
+        return plans.stream().map(this::toDTO).toList();
     }
 
     @Override
-    public Plan toEntity(PlanDTO PlanDTO) {
-        return delegate.toEntity(PlanDTO);
+    public Plan toEntity(PlanDTO planDTO) {
+        return delegate.toEntity(planDTO);
     }
 
-    private Entry getOrCreateEntry(Plan Plan, MealType mealType) {
-        return Plan.getEntries().stream()
+    private Entry getOrCreateEntry(Plan plan, MealType mealType) {
+        return plan.getEntries().stream()
                 .filter(e -> e.getStatus() == EntryStatus.PENDING
                         && e.getPlannedRecipe().getMealType() == mealType)
                 .max(Comparator.comparingInt(Entry::getDayIndex))
@@ -61,19 +61,19 @@ public class PlanMapperDecorator implements PlanMapper {
                     int index;
                     var cycle = switch (mealType) {
                         case BREAKFAST -> {
-                            index = Plan.getBreakfastIndex();
-                            Plan.setBreakfastIndex(index + 1);
-                            yield Plan.getBreakfastCycle();
+                            index = plan.getBreakfastIndex();
+                            plan.setBreakfastIndex(index + 1);
+                            yield plan.getBreakfastCycle();
                         }
                         case LUNCH -> {
-                            index = Plan.getLunchIndex();
-                            Plan.setLunchIndex(index + 1);
-                            yield Plan.getLunchCycle();
+                            index = plan.getLunchIndex();
+                            plan.setLunchIndex(index + 1);
+                            yield plan.getLunchCycle();
                         }
                         case DINNER -> {
-                            index = Plan.getDinnerIndex();
-                            Plan.setDinnerIndex(index + 1);
-                            yield Plan.getDinnerCycle();
+                            index = plan.getDinnerIndex();
+                            plan.setDinnerIndex(index + 1);
+                            yield plan.getDinnerCycle();
                         }
                     };
 
@@ -86,18 +86,18 @@ public class PlanMapperDecorator implements PlanMapper {
                             index,
                             EntryStatus.PENDING,
                             "",
-                            Plan,
+                            plan,
                             recipe,
                             null,
                             null);
 
-                    List<Entry> entries = Plan.getEntries();
+                    List<Entry> entries = plan.getEntries();
                     entries.add(newEntry);
-                    Plan.setEntries(entries);
+                    plan.setEntries(entries);
 
-                    return PlanRepository.save(Plan) // cascade saves entry
+                    return planRepository.save(plan) // cascade saves entry
                             .getEntries()
-                            .get(Plan.getEntries().size() - 1);
+                            .get(plan.getEntries().size() - 1);
                 });
     }
 

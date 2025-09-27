@@ -13,10 +13,10 @@ import org.mapstruct.ReportingPolicy;
 public interface PlanMapper {
 
     @Mapping(source = "entries", target = "entries")
-    PlanDTO toDTO(Plan Plan);
+    PlanDTO toDTO(Plan plan);
 
     @Mapping(target =  "entries", source = "entries")
-    Plan toEntity(PlanDTO PlanDTO);
+    Plan toEntity(PlanDTO planDTO);
 
-    List<PlanDTO> toDTO(List<Plan> Plans);
+    List<PlanDTO> toDTO(List<Plan> plans);
 } 

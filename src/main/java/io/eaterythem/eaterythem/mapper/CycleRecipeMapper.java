@@ -11,9 +11,9 @@ import org.mapstruct.ReportingPolicy;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = {CycleMapper.class, RecipeMapper.class, BasicCycleMapper.class})
 public interface CycleRecipeMapper {
 
-    CycleRecipeDTO toDTO(CycleRecipe CycleRecipe);
+    CycleRecipeDTO toDTO(CycleRecipe cycleRecipe);
 
-    CycleRecipe toEntity(CycleRecipeDTO CycleRecipeDTO);
+    CycleRecipe toEntity(CycleRecipeDTO cycleRecipeDTO);
 
-    List<CycleRecipe> toEntity(List<CycleRecipeDTO> CycleRecipeDTOs);
+    List<CycleRecipe> toEntity(List<CycleRecipeDTO> cycleRecipeDTOs);
 } 

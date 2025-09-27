@@ -132,7 +132,7 @@ public class DataSeeder implements CommandLineRunner {
         List<PlanParticipant> pp = new ArrayList<PlanParticipant>();
         pp.add(PlanParticipant.builder()
                 .user(user)
-                .Plan(plan)
+                .plan(plan)
                 .role(ParticipantRole.OWNER)
                 .build());
 
@@ -149,7 +149,7 @@ public class DataSeeder implements CommandLineRunner {
         plan = planRepo.save(plan);
 
         // ===== Create a  entry =====
-        Entry entry = Entry.builder().Plan(plan).dayIndex(0).build();
+        Entry entry = Entry.builder().plan(plan).dayIndex(0).build();
         entry.setPlannedRecipe(r1);
         entry.setActualRecipe(r1);
         entry.setStatus(EntryStatus.COMPLETED);

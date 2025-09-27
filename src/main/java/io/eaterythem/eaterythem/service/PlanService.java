@@ -20,58 +20,58 @@ import java.util.*;
 @AllArgsConstructor
 @Service
 public class PlanService {
-    EntryService EntryService;
+    EntryService entryService;
 
-    PlanRepository PlanRepository;
-    PlanParticipantRepository PlanParticipantRepository;
+    PlanRepository planRepository;
+    PlanParticipantRepository planParticipantRepository;
 
-    PlanMapper PlanMapper;
+    PlanMapper planMapper;
 
     public List<PlanDTO> getAllPlans() {
-        List<Plan> Plans = PlanRepository.findAll();
-        List<PlanDTO> PlanDTOs = PlanMapper.toDTO(Plans);
-        return PlanDTOs;
+        List<Plan> plans = planRepository.findAll();
+        List<PlanDTO> planDTOs = planMapper.toDTO(plans);
+        return planDTOs;
     }
 
     public PlanDTO getPlanById(Integer id) {
-        Plan Plan = PlanRepository.findById(id)
+        Plan plan = planRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("Plan not found"));
 
-        return PlanMapper.toDTO(Plan);
+        return planMapper.toDTO(plan);
     }
 
     public List<PlanDTO> getMePlans(Integer userId) {
-        List<Plan> Plans = PlanRepository.getByUserId(userId);
-        List<PlanDTO> PlanDTOs = PlanMapper.toDTO(Plans);
-        return PlanDTOs;
+        List<Plan> plans = planRepository.getByUserId(userId);
+        List<PlanDTO> planDTOs = planMapper.toDTO(plans);
+        return planDTOs;
     }
 
-    public PlanDTO createPlan(PlanDTO PlanDTO, Integer userId) {
-        Plan Plan = PlanMapper.toEntity(PlanDTO);
+    public PlanDTO createPlan(PlanDTO planDTO, Integer userId) {
+        Plan plan = planMapper.toEntity(planDTO);
 
-        Cycle Cycle;
-        if ((Cycle = Plan.getBreakfastCycle()) != null) {
-            EntryService.createEntry(
-                    EntryService.EntryMapper.toDTO(
+        Cycle cycle;
+        if ((cycle = plan.getBreakfastCycle()) != null) {
+            entryService.createEntry(
+                    entryService.entryMapper.toDTO(
                             Entry.builder()
-                                    .plannedRecipe(Cycle.getRecipes().get(0).getRecipe())
-                                    .Plan(Plan)
+                                    .plannedRecipe(cycle.getRecipes().get(0).getRecipe())
+                                    .plan(plan)
                                     .build()));
         }
-        if ((Cycle = Plan.getDinnerCycle()) != null) {
-            EntryService.createEntry(
-                    EntryService.EntryMapper.toDTO(
+        if ((cycle = plan.getDinnerCycle()) != null) {
+            entryService.createEntry(
+                    entryService.entryMapper.toDTO(
                             Entry.builder()
-                                    .plannedRecipe(Cycle.getRecipes().get(0).getRecipe())
-                                    .Plan(Plan)
+                                    .plannedRecipe(cycle.getRecipes().get(0).getRecipe())
+                                    .plan(plan)
                                     .build()));
         }
-        if ((Cycle = Plan.getLunchCycle()) != null) {
-            EntryService.createEntry(
-                    EntryService.EntryMapper.toDTO(
+        if ((cycle = plan.getLunchCycle()) != null) {
+            entryService.createEntry(
+                    entryService.entryMapper.toDTO(
                             Entry.builder()
-                                    .plannedRecipe(Cycle.getRecipes().get(0).getRecipe())
-                                    .Plan(Plan)
+                                    .plannedRecipe(cycle.getRecipes().get(0).getRecipe())
+                                    .plan(plan)
                                     .build()));
         }
 
@@ -81,36 +81,36 @@ public class PlanService {
         List<PlanParticipant> pp = new ArrayList<PlanParticipant>();
         pp.add(PlanParticipant.builder()
                 .user(user)
-                .Plan(Plan)
+                .plan(plan)
                 .role(ParticipantRole.OWNER)
                 .build());
-        Plan.setParticipants(pp);
+        plan.setParticipants(pp);
 
-        return PlanMapper.toDTO(PlanRepository.save(Plan));
+        return planMapper.toDTO(planRepository.save(plan));
     }
 
-    public PlanDTO updatePlan(Integer id, PlanDTO PlanDTO, Integer userId) {
-        Plan Plan = PlanRepository.findById(id)
+    public PlanDTO updatePlan(Integer id, PlanDTO planDTO, Integer userId) {
+        Plan plan = planRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("Plan not found"));
 
-        if (PlanParticipantRepository.getUserRole(userId, Plan.getId()) != ParticipantRole.OWNER) {
+        if (planParticipantRepository.getUserRole(userId, plan.getId()) != ParticipantRole.OWNER) {
             throw new UnauthorizedException("Only Plan Owner can edit");
         }
 
-        Plan newPPlan = PlanMapper.toEntity(PlanDTO);
+        Plan newPPlan = planMapper.toEntity(planDTO);
         newPPlan.setId(id);
 
-        return PlanMapper.toDTO(PlanRepository.save(newPPlan));
+        return planMapper.toDTO(planRepository.save(newPPlan));
     }
 
     public void deletePlan(Integer id, Integer userId) {
-        Plan Plan = PlanRepository.findById(id)
+        Plan plan = planRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("Plan not found"));
 
-        if (PlanParticipantRepository.getUserRole(userId, Plan.getId()) != ParticipantRole.OWNER) {
+        if (planParticipantRepository.getUserRole(userId, plan.getId()) != ParticipantRole.OWNER) {
             throw new UnauthorizedException("Only Plan Owner can delete");
         }
 
-        PlanRepository.deleteById(id);
+        planRepository.deleteById(id);
     }
 }

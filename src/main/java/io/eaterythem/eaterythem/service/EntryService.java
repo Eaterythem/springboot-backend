@@ -25,63 +25,63 @@ import java.util.*;
 public class EntryService {
 
     RecipeRepository recipeRepository;
-    EntryRepository EntryRepository;
-    PlanRepository PlanRepository;
-    PlanParticipantRepository PlanParticipantRepository;
+    EntryRepository entryRepository;
+    PlanRepository planRepository;
+    PlanParticipantRepository planParticipantRepository;
 
-    EntryMapper EntryMapper;
+    EntryMapper entryMapper;
 
     public List<EntryDTO> getAllEntries() {
-        List<Entry> Entries = EntryRepository.findAll();
-        List<EntryDTO> EntryDTOs = EntryMapper.toDTO(Entries);
-        return EntryDTOs;
+        List<Entry> entries = entryRepository.findAll();
+        List<EntryDTO> entryDTOs = entryMapper.toDTO(entries);
+        return entryDTOs;
     }
 
     public EntryDTO getEntryById(Integer id) {
-        Entry Entry = EntryRepository.findById(id)
+        Entry entry = entryRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("Entry not found"));
 
-        return EntryMapper.toDTO(Entry);
+        return entryMapper.toDTO(entry);
 
     }
 
-    public EntryDTO createEntry(EntryDTO EntryDTO) {
-        Entry Entry = EntryMapper.toEntity(EntryDTO);
-        return EntryMapper.toDTO(EntryRepository.save(Entry));
+    public EntryDTO createEntry(EntryDTO entryDTO) {
+        Entry entry = entryMapper.toEntity(entryDTO);
+        return entryMapper.toDTO(entryRepository.save(entry));
     }
 
-    public EntryDTO updateEntry(Integer id, EntryDTO EntryDTO, Integer userId) {
-        Entry Entry = EntryRepository.findById(id)
+    public EntryDTO updateEntry(Integer id, EntryDTO entryDTO, Integer userId) {
+        Entry entry = entryRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("Entry not found"));
 
-        if (PlanParticipantRepository.getUserRole(userId,
-                Entry.getPlan().getId()) != ParticipantRole.OWNER) {
+        if (planParticipantRepository.getUserRole(userId,
+                entry.getPlan().getId()) != ParticipantRole.OWNER) {
             throw new UnauthorizedException("Only Plan Owner can edit Entery");
         }
 
-        Entry newEntry = ObjectMerger.mergeNonNullFields(Entry, EntryMapper.toEntity(EntryDTO));
+        Entry newEntry = ObjectMerger.mergeNonNullFields(entry, entryMapper.toEntity(entryDTO));
 
-        return EntryMapper.toDTO(EntryRepository.save(newEntry));
+        return entryMapper.toDTO(entryRepository.save(newEntry));
     }
 
     public void deleteEntry(Integer id, Integer userId) {
-        Entry Entry = EntryRepository.findById(id)
+        Entry entry = entryRepository.findById(id)
                 .orElseThrow(() -> new BadRequestException("Entry not found"));
 
-        if (PlanParticipantRepository.getUserRole(userId,
-                Entry.getPlan().getId()) != ParticipantRole.OWNER) {
+        if (planParticipantRepository.getUserRole(userId,
+                entry.getPlan().getId()) != ParticipantRole.OWNER) {
             throw new UnauthorizedException("Only Plan Owner can delete Entery");
         }
 
-        EntryRepository.deleteById(id);
+        entryRepository.deleteById(id);
 
     }
 
-    public EntryDTO vote(Integer EntryId, VoteDTO voteDTO, Integer userId) {
-        Entry Entry = EntryRepository.findById(EntryId)
+    public EntryDTO vote(Integer entryId, VoteDTO voteDTO, Integer userId) {
+        Entry entry = entryRepository.findById(entryId)
                 .orElseThrow(() -> new BadRequestException("Entry Not Found"));
 
-        PlanParticipant participant = Entry.getPlan().getParticipants().stream()
+        PlanParticipant participant = entry.getPlan().getParticipants().stream()
                 .filter(p -> p.getUser().getId().equals(userId))
                 .findFirst()
                 .orElse(null);
@@ -91,7 +91,7 @@ public class EntryService {
         }
 
         // 🔑 Check if the user has already voted
-        Vote existingVote = Entry.getVotes().stream()
+        Vote existingVote = entry.getVotes().stream()
                 .filter(v -> v.getUser().getId().equals(userId))
                 .findFirst()
                 .orElse(null);
@@ -103,8 +103,8 @@ public class EntryService {
             if (voteDTO.getReplacementRecipe() != null)
             existingVote.setReplacementRecipe(recipeRepository.findById(voteDTO.getReplacementRecipe().getId()).orElse(null));
         } else {
-            Entry.getVotes().add(Vote.builder()
-                    .entry(Entry)
+            entry.getVotes().add(Vote.builder()
+                    .entry(entry)
                     .voteType(voteDTO.getVoteType())
                     .note(voteDTO.getNote())
                     .user(User.builder().id(userId).build())
@@ -113,6 +113,6 @@ public class EntryService {
 
         }
 
-        return EntryMapper.toDTO(EntryRepository.save(Entry));
+        return entryMapper.toDTO(entryRepository.save(entry));
     }
 }

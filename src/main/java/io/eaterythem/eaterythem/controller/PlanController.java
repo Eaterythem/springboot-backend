@@ -12,40 +12,40 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RestController
 @RequestMapping("/api/plans")
 public class PlanController {
-    private final PlanService PlanService;
+    private final PlanService planService;
 
-    public PlanController(PlanService PlanService) {
-        this.PlanService = PlanService;
+    public PlanController(PlanService planService) {
+        this.planService = planService;
     }
 
     @GetMapping
     public List<PlanDTO> getAllPlans() {
-        return PlanService.getAllPlans();
+        return planService.getAllPlans();
     }
 
     @GetMapping("/{id}")
     public PlanDTO getPlanById(@PathVariable Integer id) {
-        return PlanService.getPlanById(id);
+        return planService.getPlanById(id);
     }
 
     @GetMapping("/me")
     public List<PlanDTO> getMePlans(@CurrentUser UserPrincipal user) {
-        return PlanService.getMePlans(user.getUserId());
+        return planService.getMePlans(user.getUserId());
     }
     
 
     @PostMapping
-    public PlanDTO createPlan(@RequestBody PlanDTO PlanDTO, @CurrentUser UserPrincipal user) {
-        return PlanService.createPlan(PlanDTO, user.getUserId());
+    public PlanDTO createPlan(@RequestBody PlanDTO planDTO, @CurrentUser UserPrincipal user) {
+        return planService.createPlan(planDTO, user.getUserId());
     }
 
     @PutMapping("/{id}")
-    public PlanDTO updatePlan(@PathVariable Integer id, @RequestBody PlanDTO PlanDTO, @CurrentUser UserPrincipal user) {
-        return PlanService.updatePlan(id, PlanDTO, user.getUserId());
+    public PlanDTO updatePlan(@PathVariable Integer id, @RequestBody PlanDTO planDTO, @CurrentUser UserPrincipal user) {
+        return planService.updatePlan(id, planDTO, user.getUserId());
     }
 
     @DeleteMapping("/{id}")
     public void deletePlan(@PathVariable Integer id, @CurrentUser UserPrincipal user) {
-        PlanService.deletePlan(id, user.getUserId());
+        planService.deletePlan(id, user.getUserId());
     }
 } 

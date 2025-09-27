@@ -11,9 +11,9 @@ import org.mapstruct.ReportingPolicy;
 public interface VoteMapper {
 
     @Mapping(target = "entryId", source = "entry.id")
-    VoteDTO toDTO(Vote Vote);
+    VoteDTO toDTO(Vote vote);
     
     @Mapping(target = "entry.id", source = "entryId")
-    Vote toEntity(VoteDTO VoteDTO);
+    Vote toEntity(VoteDTO voteDTO);
 
 } 

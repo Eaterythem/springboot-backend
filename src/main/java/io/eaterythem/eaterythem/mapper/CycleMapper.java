@@ -10,10 +10,10 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring", uses = {UserMapper.class, CycleRecipeMapper.class, BasicUserMapper.class})
 public interface CycleMapper {
 
-    CycleDTO toDTO(Cycle Cycle);
+    CycleDTO toDTO(Cycle cycle);
     
-    List<CycleDTO> toDTO(List<Cycle> Cycles);
+    List<CycleDTO> toDTO(List<Cycle> cycles);
 
     // @Mapping(target = "sharedWith", ignore = true)
-    Cycle toEntity(CycleDTO CycleDTO);
+    Cycle toEntity(CycleDTO cycleDTO);
 } 

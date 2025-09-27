@@ -29,16 +29,16 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user")
-    private List<PlanParticipant> PlanParticipants;
+    private List<PlanParticipant> planParticipants;
 
     @OneToMany(mappedBy = "user")
     private List<Recipe> recipes;
 
     @OneToMany(mappedBy = "user")
-    private List<Vote> Votes;
+    private List<Vote> votes;
 
     @OneToMany(mappedBy = "user")
-    private List<Cycle> Cycles;
+    private List<Cycle> cycles;
 
     @ManyToMany(mappedBy = "sharedWith")
     private List<Cycle> sharedCycles;

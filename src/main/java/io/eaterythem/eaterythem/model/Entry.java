@@ -31,7 +31,7 @@ public class Entry {
 
     @ManyToOne
     @JoinColumn(name = "plan_id")
-    private Plan Plan;
+    private Plan plan;
 
     @ManyToOne
     @JoinColumn(name = "planned_recipe_id")

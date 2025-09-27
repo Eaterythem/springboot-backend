@@ -35,6 +35,7 @@ public class AuthController {
         String token = jwtUtil.generateToken(user.getEmail(), user.getId());
         Map<String, Object> response = new HashMap<>();
         response.put("token", token);
+        response.put("user", basicUserMapper.toDTO(user));
         return response;
     }
 
