@@ -7,8 +7,8 @@ import org.mapstruct.Mapper;
 
 import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = "spring", uses = { RecipeMapper.class, MealPlanMapper.class,
-        MealCycleMapper.class }, unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring", uses = { RecipeMapper.class, PlanMapper.class,
+        CycleMapper.class }, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
 
     User toEntity(UserDTO userDTO);

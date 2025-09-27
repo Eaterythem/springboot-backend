@@ -29,19 +29,19 @@ public class User {
     private String password;
 
     @OneToMany(mappedBy = "user")
-    private List<MealPlanParticipant> mealPlanParticipants;
+    private List<PlanParticipant> PlanParticipants;
 
     @OneToMany(mappedBy = "user")
     private List<Recipe> recipes;
 
     @OneToMany(mappedBy = "user")
-    private List<MealVote> mealVotes;
+    private List<Vote> Votes;
 
     @OneToMany(mappedBy = "user")
-    private List<MealCycle> mealCycles;
+    private List<Cycle> Cycles;
 
     @ManyToMany(mappedBy = "sharedWith")
-    private List<MealCycle> sharedCycles;
+    private List<Cycle> sharedCycles;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Friendship> sentFriendRequests;

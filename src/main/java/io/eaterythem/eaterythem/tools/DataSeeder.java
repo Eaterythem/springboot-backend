@@ -23,13 +23,13 @@ public class DataSeeder implements CommandLineRunner {
     @Autowired
     private RecipeRepository recipeRepo;
     @Autowired
-    private MealCycleRepository cycleRepo;
+    private CycleRepository cycleRepo;
     @Autowired
-    private MealPlanRepository planRepo;
+    private PlanRepository planRepo;
     @Autowired
-    private MealCycleRecipeRepository cycleRecipeRepo;
+    private CycleRecipeRepository cycleRecipeRepo;
     @Autowired
-    private MealEntryRepository entryRepo;
+    private EntryRepository entryRepo;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -84,20 +84,20 @@ public class DataSeeder implements CommandLineRunner {
 
         recipeRepo.saveAll(List.of(r1, r2, r3));
 
-        // ===== Create meal cycles =====
-        MealCycle breakfastCycle = new MealCycle();
+        // ===== Create  cycles =====
+        Cycle breakfastCycle = new Cycle();
         breakfastCycle.setName("BfastCycle");
         breakfastCycle.setUser(user);
         breakfastCycle.setMealType(MealType.BREAKFAST);
         breakfastCycle.setPublic(false);
 
-        MealCycle lunchCycle = new MealCycle();
+        Cycle lunchCycle = new Cycle();
         lunchCycle.setName("LunchCycle");
         lunchCycle.setUser(user);
         lunchCycle.setMealType(MealType.LUNCH);
         lunchCycle.setPublic(false);
 
-        MealCycle dinnerCycle = new MealCycle();
+        Cycle dinnerCycle = new Cycle();
         dinnerCycle.setName("DinnerCycle");
         dinnerCycle.setUser(user);
         dinnerCycle.setMealType(MealType.DINNER);
@@ -110,36 +110,36 @@ public class DataSeeder implements CommandLineRunner {
         cycleRepo.save(breakfastCycle);
 
         // ===== Add recipes to cycles =====
-        MealCycleRecipe bfastCycleRecipe = new MealCycleRecipe();
+        CycleRecipe bfastCycleRecipe = new CycleRecipe();
         bfastCycleRecipe.setCycle(breakfastCycle);
         bfastCycleRecipe.setRecipe(r1);
         bfastCycleRecipe.setPosition(0);
 
-        MealCycleRecipe lunchCycleRecipe = new MealCycleRecipe();
+        CycleRecipe lunchCycleRecipe = new CycleRecipe();
         lunchCycleRecipe.setCycle(lunchCycle);
         lunchCycleRecipe.setRecipe(r2);
         lunchCycleRecipe.setPosition(0);
 
-        MealCycleRecipe dinnerCycleRecipe = new MealCycleRecipe();
+        CycleRecipe dinnerCycleRecipe = new CycleRecipe();
         dinnerCycleRecipe.setCycle(dinnerCycle);
         dinnerCycleRecipe.setRecipe(r3);
         dinnerCycleRecipe.setPosition(0);
 
         cycleRecipeRepo.saveAll(List.of(bfastCycleRecipe, lunchCycleRecipe, dinnerCycleRecipe));
 
-        // ===== Create a meal plan =====
-        MealPlan plan = new MealPlan();
-        List<MealPlanParticipant> pp = new ArrayList<MealPlanParticipant>();
-        pp.add(MealPlanParticipant.builder()
+        // ===== Create a  plan =====
+        Plan plan = new Plan();
+        List<PlanParticipant> pp = new ArrayList<PlanParticipant>();
+        pp.add(PlanParticipant.builder()
                 .user(user)
-                .mealPlan(plan)
+                .Plan(plan)
                 .role(ParticipantRole.OWNER)
                 .build());
 
         plan.setName("plan 1");
         plan.setParticipants(pp);
         plan.setStartDate(LocalDate.now());
-        plan.setStatus(MealPlanStatus.ACTIVE);
+        plan.setStatus(PlanStatus.ACTIVE);
         plan.setBreakfastCycle(breakfastCycle);
         plan.setLunchCycle(lunchCycle);
         plan.setDinnerCycle(dinnerCycle);
@@ -148,14 +148,11 @@ public class DataSeeder implements CommandLineRunner {
         plan.setDinnerIndex(0);
         plan = planRepo.save(plan);
 
-        // ===== Create a meal entry =====
-        MealEntry entry = new MealEntry();
-        entry.setMealPlan(plan);
-        entry.setDayIndex(0);
-        // entry.setMealType(MealType.BREAKFAST);
+        // ===== Create a  entry =====
+        Entry entry = Entry.builder().Plan(plan).dayIndex(0).build();
         entry.setPlannedRecipe(r1);
         entry.setActualRecipe(r1);
-        entry.setStatus(MealEntryStatus.COMPLETED);
+        entry.setStatus(EntryStatus.COMPLETED);
         entry.setNote("Tasted good");
         entryRepo.save(entry);
 

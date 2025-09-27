@@ -9,6 +9,7 @@ import io.eaterythem.eaterythem.model.Tag;
 import io.eaterythem.eaterythem.model.User;
 import io.eaterythem.eaterythem.repository.RecipeRepository;
 import io.eaterythem.eaterythem.repository.TagRepository;
+import io.eaterythem.eaterythem.tools.ObjectMerger;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 
@@ -74,17 +75,14 @@ public class RecipeService {
             throw new UnauthorizedException("Only recipe creater can edit");
         }
 
-        recipe.setName(recipeDTO.getName());
-        recipe.setInstructions(recipeDTO.getInstructions());
-        recipe.setIngredients(recipeDTO.getIngredients());
-        recipe.setMealType(recipeDTO.getMealType());
-
         List<Tag> resolvedTags = new ArrayList<>();
         for (Tag t : recipeMapper.toEntity(recipeDTO).getTags()) {
             Tag resolvedTag = tagRepository.findByName(t.getName())
                     .orElseGet(() -> tagRepository.save(t));
             resolvedTags.add(resolvedTag);
         }
+
+        recipe = ObjectMerger.mergeNonNullFields(recipe, recipeMapper.toEntity(recipeDTO));
 
         recipe.setTags(resolvedTags);
 
@@ -103,7 +101,7 @@ public class RecipeService {
         try {
             recipeRepository.deleteById(id);
         } catch (DataIntegrityViolationException ex) {
-            throw new IllegalStateException("Cannot delete recipe — it is used in meal plans or cycles.");
+            throw new IllegalStateException("Cannot delete recipe — it is used in  plans or cycles.");
         } catch (EmptyResultDataAccessException ex) {
             throw new EntityNotFoundException("Recipe not found.");
         }

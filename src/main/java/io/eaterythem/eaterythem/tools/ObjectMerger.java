@@ -8,7 +8,7 @@ public class ObjectMerger {
      * Merge non-null fields from source into target.
      * @param target Object to update
      * @param source Object with values to copy
-     * @param <T> Type of the objects
+     * @param <T> mealType of the objects
      * @return target after merge
      */
     public static <T> T mergeNonNullFields(T target, T source) {
