@@ -37,9 +37,9 @@ public class Plan {
     private Integer lunchIndex;
     private Integer dinnerIndex;
 
-    @OneToMany(mappedBy = "Plan", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PlanParticipant> participants;
 
-    @OneToMany(mappedBy = "Plan", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Entry> entries;
 }
