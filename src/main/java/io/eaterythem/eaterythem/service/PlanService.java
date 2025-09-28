@@ -12,6 +12,7 @@ import io.eaterythem.eaterythem.model.User;
 import io.eaterythem.eaterythem.model.enums.ParticipantRole;
 import io.eaterythem.eaterythem.repository.PlanParticipantRepository;
 import io.eaterythem.eaterythem.repository.PlanRepository;
+import io.eaterythem.eaterythem.tools.ObjectMerger;
 import lombok.AllArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -97,10 +98,11 @@ public class PlanService {
             throw new UnauthorizedException("Only Plan Owner can edit");
         }
 
-        Plan newPPlan = planMapper.toEntity(planDTO);
-        newPPlan.setId(id);
+        planDTO.setEntries(null);
 
-        return planMapper.toDTO(planRepository.save(newPPlan));
+        plan = ObjectMerger.mergeNonNullFields(plan, planMapper.toEntity(planDTO));
+
+        return planMapper.toDTO(planRepository.save(plan));
     }
 
     public void deletePlan(Integer id, Integer userId) {

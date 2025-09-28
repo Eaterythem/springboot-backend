@@ -39,7 +39,7 @@ public class PlanController {
         return planService.createPlan(planDTO, user.getUserId());
     }
 
-    @PutMapping("/{id}")
+    @PatchMapping("/{id}")
     public PlanDTO updatePlan(@PathVariable Integer id, @RequestBody PlanDTO planDTO, @CurrentUser UserPrincipal user) {
         return planService.updatePlan(id, planDTO, user.getUserId());
     }
