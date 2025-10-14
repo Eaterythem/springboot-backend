@@ -15,42 +15,42 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/cycles")
 public class CycleController {
-    private final CycleService CycleService;
+    private final CycleService cycleService;
 
     @GetMapping
     public List<CycleDTO> getAllCycles() {
-        return CycleService.getAllCycles();
+        return cycleService.getAllCycles();
     }
 
     @GetMapping("/me")
     public List<CycleDTO> getMeCycles(@CurrentUser UserPrincipal user) {
-        return CycleService.getMeCycles(user.getUserId());
+        return cycleService.getMeCycles(user.getUserId());
     }
 
     @GetMapping("/{id}")
     public CycleDTO getCycleById(@PathVariable Integer id) {
-        return CycleService.getCycleById(id);
+        return cycleService.getCycleById(id);
     }
 
     @PostMapping
-    public CycleDTO createCycle(@RequestBody CycleDTO CycleDTO, @CurrentUser UserPrincipal user) {
-        return CycleService.createCycle(CycleDTO, user.getUserId());
+    public CycleDTO createCycle(@RequestBody CycleDTO cycleDTO, @CurrentUser UserPrincipal user) {
+        return cycleService.createCycle(cycleDTO, user.getUserId());
     }
 
     @PutMapping("/{id}")
-    public CycleDTO updateCycle(@PathVariable Integer id, @RequestBody CycleDTO CycleDTO,
+    public CycleDTO updateCycle(@PathVariable Integer id, @RequestBody CycleDTO cycleDTO,
             @CurrentUser UserPrincipal user) {
-        return CycleService.updateCycle(id, CycleDTO, user.getUserId());
+        return cycleService.updateCycle(id, cycleDTO, user.getUserId());
     }
 
     @PatchMapping("/{id}/recipes")
-    public CycleDTO updateCycleRecipes(@PathVariable Integer id, @RequestBody  List<CycleRecipeDTO> CycleRecipeDTOs,
+    public CycleDTO updateCycleRecipes(@PathVariable Integer id, @RequestBody  List<CycleRecipeDTO> cycleRecipeDTOs,
             @CurrentUser UserPrincipal user) {
-        return CycleService.updateRecipes(id, CycleRecipeDTOs, user.getUserId());
+        return cycleService.updateRecipes(id, cycleRecipeDTOs, user.getUserId());
     }
 
     @DeleteMapping("/{id}")
     public void deleteCycle(@PathVariable Integer id, @CurrentUser UserPrincipal user) {
-        CycleService.deleteCycle(id, user.getUserId());
+        cycleService.deleteCycle(id, user.getUserId());
     }
 }

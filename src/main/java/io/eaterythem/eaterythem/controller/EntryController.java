@@ -33,13 +33,13 @@ public class EntryController {
     }
 
     @PostMapping
-    public EntryDTO createEntry(@RequestBody EntryDTO EntryDTO) {
-        return entryService.createEntry(EntryDTO);
+    public EntryDTO createEntry(@RequestBody EntryDTO entryDTO) {
+        return entryService.createEntry(entryDTO);
     }
 
     @PutMapping("/{id}")
-    public EntryDTO updateEntry(@PathVariable Integer id, @RequestBody EntryDTO EntryDTO, @CurrentUser UserPrincipal user) {
-        return entryService.updateEntry(id, EntryDTO, user.getUserId());
+    public EntryDTO updateEntry(@PathVariable Integer id, @RequestBody EntryDTO entryDTO, @CurrentUser UserPrincipal user) {
+        return entryService.updateEntry(id, entryDTO, user.getUserId());
     }
 
     @DeleteMapping("/{id}")
