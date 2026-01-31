@@ -47,6 +47,7 @@ services:
     env_file:
       - .env
     environment:
+      DB_URL: jdbc:postgresql://postgres:${DB_PORT:-5432}/${DB_NAME:-eaterythemdb}
       DB_HOST: postgres
       DB_PORT: ${DB_PORT:-5432}
       DB_USER: ${DB_USER:-eaterythem}

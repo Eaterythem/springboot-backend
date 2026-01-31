@@ -90,4 +90,21 @@ Building EateryThem helped me gain hands-on experience with:
    # JWT configuration
    jwt.secret=your_jwt_secret
    jwt.expiration=3600000
-3. Place the credentials.json file for Google Drive image uploading in the same folder as application.properties.
+
+3. Create a `.env` file in the project root (optional but recommended for local development and Docker).
+
+   Add the following variables to the `.env` file (example):
+
+   ```env
+   SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/eaterythem
+   SPRING_DATASOURCE_USERNAME=your_username
+   SPRING_DATASOURCE_PASSWORD=your_password
+   SPRING_JPA_HIBERNATE_DDL_AUTO=update
+
+   # JWT configuration
+   JWT_SECRET=your_jwt_secret
+   JWT_EXPIRATION=3600000
+   ```
+
+   Note: `.env` variables can be used by Docker Compose or local run configurations to override values in `application.properties`.
+3. Place the credentials.json file for Google Drive image uploading in credentials folder at root.
