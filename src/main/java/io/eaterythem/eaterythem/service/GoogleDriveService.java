@@ -20,45 +20,46 @@ import java.util.Collections;
 
 @Service
 public class GoogleDriveService {
-    
-    private static final GsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-    private final Drive driveService;
 
-    @Value("${google.drive.parent-folder-id}")
-    private String parentFolderId;
+        private static final GsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
+        private final Drive driveService;
 
-    public GoogleDriveService() throws Exception {
-        InputStream in = new FileInputStream("src/main/resources/credentials.json");
+        @Value("${google.drive.parent-folder-id}")
+        private String parentFolderId;
 
-        var httpTransport = GoogleNetHttpTransport.newTrustedTransport();
+        public GoogleDriveService() throws Exception {
+                InputStream in = new FileInputStream(
+                                System.getenv("GOOGLE_APPLICATION_CREDENTIALS"));
 
-        this.driveService = new Drive.Builder(
-                httpTransport,
-                JSON_FACTORY,
-                GoogleDriveUtils.getCredentials(in))
-                .setApplicationName("EateryThem")
-                .build();
-    }
+                var httpTransport = GoogleNetHttpTransport.newTrustedTransport();
 
-    public String uploadFile(MultipartFile multipartFile) throws Exception {
-        File fileMetadata = new File();
-        fileMetadata.setName(multipartFile.getOriginalFilename());
-        fileMetadata.setParents(Collections.singletonList(parentFolderId));
+                this.driveService = new Drive.Builder(
+                                httpTransport,
+                                JSON_FACTORY,
+                                GoogleDriveUtils.getCredentials(in))
+                                .setApplicationName("EateryThem")
+                                .build();
+        }
 
-        InputStreamContent mediaContent =
-                new InputStreamContent(multipartFile.getContentType(), multipartFile.getInputStream());
+        public String uploadFile(MultipartFile multipartFile) throws Exception {
+                File fileMetadata = new File();
+                fileMetadata.setName(multipartFile.getOriginalFilename());
+                fileMetadata.setParents(Collections.singletonList(parentFolderId));
 
-        File uploadedFile = driveService.files()
-                .create(fileMetadata, mediaContent)
-                .setFields("id")
-                .execute();
+                InputStreamContent mediaContent = new InputStreamContent(multipartFile.getContentType(),
+                                multipartFile.getInputStream());
 
-        // make it public
-        Permission permission = new Permission()
-                .setType("anyone")
-                .setRole("reader");
-        driveService.permissions().create(uploadedFile.getId(), permission).execute();
+                File uploadedFile = driveService.files()
+                                .create(fileMetadata, mediaContent)
+                                .setFields("id")
+                                .execute();
 
-        return "https://drive.google.com/uc?id=" + uploadedFile.getId();
-    }
+                // make it public
+                Permission permission = new Permission()
+                                .setType("anyone")
+                                .setRole("reader");
+                driveService.permissions().create(uploadedFile.getId(), permission).execute();
+
+                return "https://drive.google.com/uc?id=" + uploadedFile.getId();
+        }
 }

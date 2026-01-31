@@ -1,5 +1,7 @@
 HELP.md
 
+
+credentials/
 resources/
 
 target/
@@ -35,3 +37,9 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Secrets ###
+# Local dotenv and secrets files
+.env
+.env.*
+src/main/resources/application-secrets.properties
