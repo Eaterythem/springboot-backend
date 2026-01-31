@@ -28,7 +28,7 @@ public class AuthController {
     private final BasicUserMapper basicUserMapper;
 
     @PostMapping("/register")
-    public Map<String, Object> register(@RequestBody @Valid RegisterDTO registerDTO) {
+    public ResponseEntity<Map<String, Object>> register(@RequestBody @Valid RegisterDTO registerDTO) {
 
         User user = authService.register(registerDTO);
 
@@ -36,11 +36,11 @@ public class AuthController {
         Map<String, Object> response = new HashMap<>();
         response.put("token", token);
         response.put("user", basicUserMapper.toDTO(user));
-        return response;
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")
-    public Map<String, Object> login(@RequestBody @Valid LoginDTO loginDTO) {
+    public ResponseEntity<Map<String, Object>> login(@RequestBody @Valid LoginDTO loginDTO) {
         
         User user = authService.login(loginDTO);
         
@@ -48,15 +48,15 @@ public class AuthController {
         Map<String, Object> response = new HashMap<>();
         response.put("token", token);
         response.put("user", basicUserMapper.toDTO(user));
-        return response;
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/me")
-    public UserDTO me(@CurrentUser UserPrincipal user) {
+    public ResponseEntity<UserDTO> me(@CurrentUser UserPrincipal user) {
 
         UserDTO userDTO = authService.me(user.getUsername());
         
-        return userDTO;
+        return ResponseEntity.ok(userDTO);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
