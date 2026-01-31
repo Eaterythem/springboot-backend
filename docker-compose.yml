@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: eaterythem-postgres
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${DB_USER:-eaterythem}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-foodCycle}
+      POSTGRES_DB: ${DB_NAME:-eaterythemdb}
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - eaterythem-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U eaterythem"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  adminer:
+    image: adminer:latest
+    container_name: eaterythem-adminer
+    ports:
+      - "8081:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - eaterythem-network
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+
+  app:
+    build: .
+    container_name: eaterythem-app
+    restart: unless-stopped
+    ports:
+      - "8082:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      DB_HOST: postgres
+      DB_PORT: ${DB_PORT:-5432}
+      DB_USER: ${DB_USER:-eaterythem}
+      DB_PASSWORD: ${DB_PASSWORD:-foodCycle}
+      GOOGLE_APPLICATION_CREDENTIALS: /app/credentials/credentials.json
+    volumes:
+      - ./credentials/credentials.json:/app/credentials/credentials.json:ro
+    networks:
+      - eaterythem-network
+
+
+volumes:
+  postgres_data:
+
+networks:
+  eaterythem-network:
+    driver: bridge
